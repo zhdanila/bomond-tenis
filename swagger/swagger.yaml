@@ -1,0 +1,316 @@
+swagger: '2.0'
+info:
+  title: bomond-tenis
+  version: 1.0.0
+paths:
+  /v1/bomond.vn/auth/sign-up:
+    post:
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/UserSignup'
+      responses:
+        '200':
+          description: User successfully signed up
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Authentication
+
+  /v1/bomond.vn/auth/sign-in:
+    post:
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/UserSignin'
+      responses:
+        '200':
+          description: User successfully signed in
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Authentication
+
+  /v1/bomond.vn/auth/logout:
+    post:
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/Authorization'
+      responses:
+        '200':
+          description: User successfully logged out
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Authentication
+
+  /v1/bomond.vn/users/{user_id}:
+    get:
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/UserId'
+      responses:
+        '200':
+          description: User details retrieved
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Users
+
+    put:
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/UserId'
+        - $ref: '#/parameters/UserUpdate'
+      responses:
+        '200':
+          description: User successfully updated
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Users
+
+    delete:
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/UserId'
+      responses:
+        '200':
+          description: User successfully deleted
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Users
+
+  /v1/bomond/courts:
+    get:
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Courts list retrieved
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Courts
+
+  /v1/bomond.vn/{court_id}/book:
+    post:
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/CourtId'
+        - $ref: '#/parameters/BookingRequest'
+      responses:
+        '200':
+          description: Court successfully booked
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Courts
+
+    get:
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/CourtId'
+      responses:
+        '200':
+          description: Booking details retrieved
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Courts
+
+  /v1/bomond/{court_id}/book/{book_id}:
+    delete:
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/CourtId'
+        - $ref: '#/parameters/BookingId'
+      responses:
+        '200':
+          description: Booking successfully deleted
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResult'
+      deprecated: false
+      tags:
+        - Courts
+
+parameters:
+  Authorization:
+    name: Authorization
+    in: header
+    type: string
+    required: true
+
+  UserSignup:
+    name: userSignup
+    in: body
+    schema:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    required: true
+
+  UserSignin:
+    name: userSignin
+    in: body
+    schema:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    required: true
+
+  UserId:
+    name: user_id
+    in: path
+    required: true
+    type: string
+
+  UserUpdate:
+    name: userUpdate
+    in: body
+    schema:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
+  CourtId:
+    name: court_id
+    in: path
+    required: true
+    type: string
+
+  BookingRequest:
+    name: bookingRequest
+    in: body
+    schema:
+      type: object
+      properties:
+        userId:
+          type: string
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+          format: time
+        duration:
+          type: integer
+    required: true
+
+  BookingId:
+    name: book_id
+    in: path
+    required: true
+    type: string
+
+definitions:
+  SuccessResponse:
+    properties:
+      code:
+        type: string
+      data:
+        type: object
+      err:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+      timestamp:
+        format: date-time
+        type: string
+    type: object
+
+  ErrorResult:
+    description: Error response
+    type: object
+    properties:
+      timestamp:
+        type: string
+        format: date-time
+        readOnly: true
+      status:
+        type: integer
+        maxLength: 3
+      code:
+        type: string
+        description: Error code
+        maxLength: 10
+      message:
+        type: string
+        description: Error message
+        maxLength: 255
+      debugInfo:
+        type: string
+        description: Detailed error information
+        maxLength: 512
