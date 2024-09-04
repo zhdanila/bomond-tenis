@@ -111,6 +111,30 @@ func init() {
         }
       }
     },
+    "/v1/bomond.vn/courts": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Courts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Courts list retrieved",
+            "schema": {
+              "$ref": "#/definitions/SuccessResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResult"
+            }
+          }
+        }
+      }
+    },
     "/v1/bomond.vn/users/{user_id}": {
       "get": {
         "produces": [
@@ -256,31 +280,7 @@ func init() {
         }
       }
     },
-    "/v1/bomond/courts": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "Courts"
-        ],
-        "responses": {
-          "200": {
-            "description": "Courts list retrieved",
-            "schema": {
-              "$ref": "#/definitions/SuccessResponse"
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResult"
-            }
-          }
-        }
-      }
-    },
-    "/v1/bomond/{court_id}/book/{book_id}": {
+    "/v1/bomond.vn/{court_id}/book/{book_id}": {
       "delete": {
         "produces": [
           "application/json"
@@ -599,6 +599,30 @@ func init() {
         }
       }
     },
+    "/v1/bomond.vn/courts": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Courts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Courts list retrieved",
+            "schema": {
+              "$ref": "#/definitions/SuccessResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResult"
+            }
+          }
+        }
+      }
+    },
     "/v1/bomond.vn/users/{user_id}": {
       "get": {
         "produces": [
@@ -795,31 +819,7 @@ func init() {
         }
       }
     },
-    "/v1/bomond/courts": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "Courts"
-        ],
-        "responses": {
-          "200": {
-            "description": "Courts list retrieved",
-            "schema": {
-              "$ref": "#/definitions/SuccessResponse"
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "schema": {
-              "$ref": "#/definitions/ErrorResult"
-            }
-          }
-        }
-      }
-    },
-    "/v1/bomond/{court_id}/book/{book_id}": {
+    "/v1/bomond.vn/{court_id}/book/{book_id}": {
       "delete": {
         "produces": [
           "application/json"

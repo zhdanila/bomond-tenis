@@ -12,8 +12,8 @@ import (
 	"strings"
 )
 
-// DeleteV1BomondCourtIDBookBookIDURL generates an URL for the delete v1 bomond court ID book book ID operation
-type DeleteV1BomondCourtIDBookBookIDURL struct {
+// DeleteV1BomondVnCourtIDBookBookIDURL generates an URL for the delete v1 bomond vn court ID book book ID operation
+type DeleteV1BomondVnCourtIDBookBookIDURL struct {
 	BookID  string
 	CourtID string
 
@@ -25,7 +25,7 @@ type DeleteV1BomondCourtIDBookBookIDURL struct {
 // WithBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *DeleteV1BomondCourtIDBookBookIDURL) WithBasePath(bp string) *DeleteV1BomondCourtIDBookBookIDURL {
+func (o *DeleteV1BomondVnCourtIDBookBookIDURL) WithBasePath(bp string) *DeleteV1BomondVnCourtIDBookBookIDURL {
 	o.SetBasePath(bp)
 	return o
 }
@@ -33,28 +33,28 @@ func (o *DeleteV1BomondCourtIDBookBookIDURL) WithBasePath(bp string) *DeleteV1Bo
 // SetBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *DeleteV1BomondCourtIDBookBookIDURL) SetBasePath(bp string) {
+func (o *DeleteV1BomondVnCourtIDBookBookIDURL) SetBasePath(bp string) {
 	o._basePath = bp
 }
 
 // Build a url path and query string
-func (o *DeleteV1BomondCourtIDBookBookIDURL) Build() (*url.URL, error) {
+func (o *DeleteV1BomondVnCourtIDBookBookIDURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/v1/bomond/{court_id}/book/{book_id}"
+	var _path = "/v1/bomond.vn/{court_id}/book/{book_id}"
 
 	bookID := o.BookID
 	if bookID != "" {
 		_path = strings.Replace(_path, "{book_id}", bookID, -1)
 	} else {
-		return nil, errors.New("bookId is required on DeleteV1BomondCourtIDBookBookIDURL")
+		return nil, errors.New("bookId is required on DeleteV1BomondVnCourtIDBookBookIDURL")
 	}
 
 	courtID := o.CourtID
 	if courtID != "" {
 		_path = strings.Replace(_path, "{court_id}", courtID, -1)
 	} else {
-		return nil, errors.New("courtId is required on DeleteV1BomondCourtIDBookBookIDURL")
+		return nil, errors.New("courtId is required on DeleteV1BomondVnCourtIDBookBookIDURL")
 	}
 
 	_basePath := o._basePath
@@ -64,7 +64,7 @@ func (o *DeleteV1BomondCourtIDBookBookIDURL) Build() (*url.URL, error) {
 }
 
 // Must is a helper function to panic when the url builder returns an error
-func (o *DeleteV1BomondCourtIDBookBookIDURL) Must(u *url.URL, err error) *url.URL {
+func (o *DeleteV1BomondVnCourtIDBookBookIDURL) Must(u *url.URL, err error) *url.URL {
 	if err != nil {
 		panic(err)
 	}
@@ -75,17 +75,17 @@ func (o *DeleteV1BomondCourtIDBookBookIDURL) Must(u *url.URL, err error) *url.UR
 }
 
 // String returns the string representation of the path with query string
-func (o *DeleteV1BomondCourtIDBookBookIDURL) String() string {
+func (o *DeleteV1BomondVnCourtIDBookBookIDURL) String() string {
 	return o.Must(o.Build()).String()
 }
 
 // BuildFull builds a full url with scheme, host, path and query string
-func (o *DeleteV1BomondCourtIDBookBookIDURL) BuildFull(scheme, host string) (*url.URL, error) {
+func (o *DeleteV1BomondVnCourtIDBookBookIDURL) BuildFull(scheme, host string) (*url.URL, error) {
 	if scheme == "" {
-		return nil, errors.New("scheme is required for a full url on DeleteV1BomondCourtIDBookBookIDURL")
+		return nil, errors.New("scheme is required for a full url on DeleteV1BomondVnCourtIDBookBookIDURL")
 	}
 	if host == "" {
-		return nil, errors.New("host is required for a full url on DeleteV1BomondCourtIDBookBookIDURL")
+		return nil, errors.New("host is required for a full url on DeleteV1BomondVnCourtIDBookBookIDURL")
 	}
 
 	base, err := o.Build()
@@ -99,6 +99,6 @@ func (o *DeleteV1BomondCourtIDBookBookIDURL) BuildFull(scheme, host string) (*ur
 }
 
 // StringFull returns the string representation of a complete url
-func (o *DeleteV1BomondCourtIDBookBookIDURL) StringFull(scheme, host string) string {
+func (o *DeleteV1BomondVnCourtIDBookBookIDURL) StringFull(scheme, host string) string {
 	return o.Must(o.BuildFull(scheme, host)).String()
 }

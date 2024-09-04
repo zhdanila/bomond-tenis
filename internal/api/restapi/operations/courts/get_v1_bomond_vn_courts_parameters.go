@@ -12,19 +12,19 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// NewGetV1BomondCourtsParams creates a new GetV1BomondCourtsParams object
+// NewGetV1BomondVnCourtsParams creates a new GetV1BomondVnCourtsParams object
 //
 // There are no default values defined in the spec.
-func NewGetV1BomondCourtsParams() GetV1BomondCourtsParams {
+func NewGetV1BomondVnCourtsParams() GetV1BomondVnCourtsParams {
 
-	return GetV1BomondCourtsParams{}
+	return GetV1BomondVnCourtsParams{}
 }
 
-// GetV1BomondCourtsParams contains all the bound params for the get v1 bomond courts operation
+// GetV1BomondVnCourtsParams contains all the bound params for the get v1 bomond vn courts operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters GetV1BomondCourts
-type GetV1BomondCourtsParams struct {
+// swagger:parameters GetV1BomondVnCourts
+type GetV1BomondVnCourtsParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -33,8 +33,8 @@ type GetV1BomondCourtsParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewGetV1BomondCourtsParams() beforehand.
-func (o *GetV1BomondCourtsParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewGetV1BomondVnCourtsParams() beforehand.
+func (o *GetV1BomondVnCourtsParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r

@@ -3,6 +3,7 @@ module bomond-tenis
 go 1.23.0
 
 require (
+	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/go-openapi/errors v0.22.0
 	github.com/go-openapi/loads v0.22.0
 	github.com/go-openapi/runtime v0.28.0
@@ -11,6 +12,8 @@ require (
 	github.com/go-openapi/swag v0.23.0
 	github.com/go-openapi/validate v0.24.0
 	github.com/jessevdk/go-flags v1.6.1
+	github.com/joho/godotenv v1.5.1
+	github.com/rs/zerolog v1.33.0
 	golang.org/x/net v0.28.0
 )
 
@@ -27,7 +30,6 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
-	github.com/rs/zerolog v1.33.0 // indirect
 	go.mongodb.org/mongo-driver v1.14.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.24.0 // indirect

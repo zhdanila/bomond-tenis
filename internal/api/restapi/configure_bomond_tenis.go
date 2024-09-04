@@ -40,8 +40,8 @@ func configureAPI(api *operations.BomondTenisAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	if api.CourtsDeleteV1BomondCourtIDBookBookIDHandler == nil {
-		api.CourtsDeleteV1BomondCourtIDBookBookIDHandler = courts.DeleteV1BomondCourtIDBookBookIDHandlerFunc(func(params courts.DeleteV1BomondCourtIDBookBookIDParams) middleware.Responder {
+	if api.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler == nil {
+		api.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler = courts.DeleteV1BomondVnCourtIDBookBookIDHandlerFunc(func(params courts.DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation courts.DeleteV1BomondCourtIDBookBookID has not yet been implemented")
 		})
 	}
@@ -50,8 +50,8 @@ func configureAPI(api *operations.BomondTenisAPI) http.Handler {
 			return middleware.NotImplemented("operation users.DeleteV1BomondVnUsersUserID has not yet been implemented")
 		})
 	}
-	if api.CourtsGetV1BomondCourtsHandler == nil {
-		api.CourtsGetV1BomondCourtsHandler = courts.GetV1BomondCourtsHandlerFunc(func(params courts.GetV1BomondCourtsParams) middleware.Responder {
+	if api.CourtsGetV1BomondVnCourtsHandler == nil {
+		api.CourtsGetV1BomondVnCourtsHandler = courts.GetV1BomondVnCourtsHandlerFunc(func(params courts.GetV1BomondVnCourtsParams) middleware.Responder {
 			return middleware.NotImplemented("operation courts.GetV1BomondCourts has not yet been implemented")
 		})
 	}

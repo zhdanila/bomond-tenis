@@ -116,7 +116,7 @@ paths:
       tags:
         - Users
 
-  /v1/bomond/courts:
+  /v1/bomond.vn/courts:
     get:
       produces:
         - application/json
@@ -171,7 +171,7 @@ paths:
       tags:
         - Courts
 
-  /v1/bomond/{court_id}/book/{book_id}:
+  /v1/bomond.vn/{court_id}/book/{book_id}:
     delete:
       produces:
         - application/json

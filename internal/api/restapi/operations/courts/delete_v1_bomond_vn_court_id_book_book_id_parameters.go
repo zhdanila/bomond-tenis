@@ -13,19 +13,19 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-// NewDeleteV1BomondCourtIDBookBookIDParams creates a new DeleteV1BomondCourtIDBookBookIDParams object
+// NewDeleteV1BomondVnCourtIDBookBookIDParams creates a new DeleteV1BomondVnCourtIDBookBookIDParams object
 //
 // There are no default values defined in the spec.
-func NewDeleteV1BomondCourtIDBookBookIDParams() DeleteV1BomondCourtIDBookBookIDParams {
+func NewDeleteV1BomondVnCourtIDBookBookIDParams() DeleteV1BomondVnCourtIDBookBookIDParams {
 
-	return DeleteV1BomondCourtIDBookBookIDParams{}
+	return DeleteV1BomondVnCourtIDBookBookIDParams{}
 }
 
-// DeleteV1BomondCourtIDBookBookIDParams contains all the bound params for the delete v1 bomond court ID book book ID operation
+// DeleteV1BomondVnCourtIDBookBookIDParams contains all the bound params for the delete v1 bomond vn court ID book book ID operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters DeleteV1BomondCourtIDBookBookID
-type DeleteV1BomondCourtIDBookBookIDParams struct {
+// swagger:parameters DeleteV1BomondVnCourtIDBookBookID
+type DeleteV1BomondVnCourtIDBookBookIDParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -45,8 +45,8 @@ type DeleteV1BomondCourtIDBookBookIDParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewDeleteV1BomondCourtIDBookBookIDParams() beforehand.
-func (o *DeleteV1BomondCourtIDBookBookIDParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewDeleteV1BomondVnCourtIDBookBookIDParams() beforehand.
+func (o *DeleteV1BomondVnCourtIDBookBookIDParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
@@ -67,7 +67,7 @@ func (o *DeleteV1BomondCourtIDBookBookIDParams) BindRequest(r *http.Request, rou
 }
 
 // bindBookID binds and validates parameter BookID from path.
-func (o *DeleteV1BomondCourtIDBookBookIDParams) bindBookID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *DeleteV1BomondVnCourtIDBookBookIDParams) bindBookID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -81,7 +81,7 @@ func (o *DeleteV1BomondCourtIDBookBookIDParams) bindBookID(rawData []string, has
 }
 
 // bindCourtID binds and validates parameter CourtID from path.
-func (o *DeleteV1BomondCourtIDBookBookIDParams) bindCourtID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *DeleteV1BomondVnCourtIDBookBookIDParams) bindCourtID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]

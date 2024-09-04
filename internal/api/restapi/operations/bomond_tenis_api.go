@@ -46,17 +46,17 @@ func NewBomondTenisAPI(spec *loads.Document) *BomondTenisAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
-		CourtsDeleteV1BomondCourtIDBookBookIDHandler: courts.DeleteV1BomondCourtIDBookBookIDHandlerFunc(func(params courts.DeleteV1BomondCourtIDBookBookIDParams) middleware.Responder {
-			return middleware.NotImplemented("operation courts.DeleteV1BomondCourtIDBookBookID has not yet been implemented")
+		CourtsDeleteV1BomondVnCourtIDBookBookIDHandler: courts.DeleteV1BomondVnCourtIDBookBookIDHandlerFunc(func(params courts.DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation courts.DeleteV1BomondVnCourtIDBookBookID has not yet been implemented")
 		}),
 		UsersDeleteV1BomondVnUsersUserIDHandler: users.DeleteV1BomondVnUsersUserIDHandlerFunc(func(params users.DeleteV1BomondVnUsersUserIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation users.DeleteV1BomondVnUsersUserID has not yet been implemented")
 		}),
-		CourtsGetV1BomondCourtsHandler: courts.GetV1BomondCourtsHandlerFunc(func(params courts.GetV1BomondCourtsParams) middleware.Responder {
-			return middleware.NotImplemented("operation courts.GetV1BomondCourts has not yet been implemented")
-		}),
 		CourtsGetV1BomondVnCourtIDBookHandler: courts.GetV1BomondVnCourtIDBookHandlerFunc(func(params courts.GetV1BomondVnCourtIDBookParams) middleware.Responder {
 			return middleware.NotImplemented("operation courts.GetV1BomondVnCourtIDBook has not yet been implemented")
+		}),
+		CourtsGetV1BomondVnCourtsHandler: courts.GetV1BomondVnCourtsHandlerFunc(func(params courts.GetV1BomondVnCourtsParams) middleware.Responder {
+			return middleware.NotImplemented("operation courts.GetV1BomondVnCourts has not yet been implemented")
 		}),
 		UsersGetV1BomondVnUsersUserIDHandler: users.GetV1BomondVnUsersUserIDHandlerFunc(func(params users.GetV1BomondVnUsersUserIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation users.GetV1BomondVnUsersUserID has not yet been implemented")
@@ -112,14 +112,14 @@ type BomondTenisAPI struct {
 	//   - application/json
 	JSONProducer runtime.Producer
 
-	// CourtsDeleteV1BomondCourtIDBookBookIDHandler sets the operation handler for the delete v1 bomond court ID book book ID operation
-	CourtsDeleteV1BomondCourtIDBookBookIDHandler courts.DeleteV1BomondCourtIDBookBookIDHandler
+	// CourtsDeleteV1BomondVnCourtIDBookBookIDHandler sets the operation handler for the delete v1 bomond vn court ID book book ID operation
+	CourtsDeleteV1BomondVnCourtIDBookBookIDHandler courts.DeleteV1BomondVnCourtIDBookBookIDHandler
 	// UsersDeleteV1BomondVnUsersUserIDHandler sets the operation handler for the delete v1 bomond vn users user ID operation
 	UsersDeleteV1BomondVnUsersUserIDHandler users.DeleteV1BomondVnUsersUserIDHandler
-	// CourtsGetV1BomondCourtsHandler sets the operation handler for the get v1 bomond courts operation
-	CourtsGetV1BomondCourtsHandler courts.GetV1BomondCourtsHandler
 	// CourtsGetV1BomondVnCourtIDBookHandler sets the operation handler for the get v1 bomond vn court ID book operation
 	CourtsGetV1BomondVnCourtIDBookHandler courts.GetV1BomondVnCourtIDBookHandler
+	// CourtsGetV1BomondVnCourtsHandler sets the operation handler for the get v1 bomond vn courts operation
+	CourtsGetV1BomondVnCourtsHandler courts.GetV1BomondVnCourtsHandler
 	// UsersGetV1BomondVnUsersUserIDHandler sets the operation handler for the get v1 bomond vn users user ID operation
 	UsersGetV1BomondVnUsersUserIDHandler users.GetV1BomondVnUsersUserIDHandler
 	// AuthenticationPostV1BomondVnAuthLogoutHandler sets the operation handler for the post v1 bomond vn auth logout operation
@@ -209,17 +209,17 @@ func (o *BomondTenisAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.CourtsDeleteV1BomondCourtIDBookBookIDHandler == nil {
-		unregistered = append(unregistered, "courts.DeleteV1BomondCourtIDBookBookIDHandler")
+	if o.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler == nil {
+		unregistered = append(unregistered, "courts.DeleteV1BomondVnCourtIDBookBookIDHandler")
 	}
 	if o.UsersDeleteV1BomondVnUsersUserIDHandler == nil {
 		unregistered = append(unregistered, "users.DeleteV1BomondVnUsersUserIDHandler")
 	}
-	if o.CourtsGetV1BomondCourtsHandler == nil {
-		unregistered = append(unregistered, "courts.GetV1BomondCourtsHandler")
-	}
 	if o.CourtsGetV1BomondVnCourtIDBookHandler == nil {
 		unregistered = append(unregistered, "courts.GetV1BomondVnCourtIDBookHandler")
+	}
+	if o.CourtsGetV1BomondVnCourtsHandler == nil {
+		unregistered = append(unregistered, "courts.GetV1BomondVnCourtsHandler")
 	}
 	if o.UsersGetV1BomondVnUsersUserIDHandler == nil {
 		unregistered = append(unregistered, "users.GetV1BomondVnUsersUserIDHandler")
@@ -330,7 +330,7 @@ func (o *BomondTenisAPI) initHandlerCache() {
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
-	o.handlers["DELETE"]["/v1/bomond/{court_id}/book/{book_id}"] = courts.NewDeleteV1BomondCourtIDBookBookID(o.context, o.CourtsDeleteV1BomondCourtIDBookBookIDHandler)
+	o.handlers["DELETE"]["/v1/bomond.vn/{court_id}/book/{book_id}"] = courts.NewDeleteV1BomondVnCourtIDBookBookID(o.context, o.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
@@ -338,11 +338,11 @@ func (o *BomondTenisAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/v1/bomond/courts"] = courts.NewGetV1BomondCourts(o.context, o.CourtsGetV1BomondCourtsHandler)
+	o.handlers["GET"]["/v1/bomond.vn/{court_id}/book"] = courts.NewGetV1BomondVnCourtIDBook(o.context, o.CourtsGetV1BomondVnCourtIDBookHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/v1/bomond.vn/{court_id}/book"] = courts.NewGetV1BomondVnCourtIDBook(o.context, o.CourtsGetV1BomondVnCourtIDBookHandler)
+	o.handlers["GET"]["/v1/bomond.vn/courts"] = courts.NewGetV1BomondVnCourts(o.context, o.CourtsGetV1BomondVnCourtsHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
