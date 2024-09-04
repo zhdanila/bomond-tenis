@@ -13,7 +13,7 @@ func SignUpHandler(service service.Authorization) authentication.PostV1BomondVnA
 	return func(params authentication.PostV1BomondVnAuthSignUpParams) middleware.Responder {
 		id, err := service.SignUp(params.UserSignup.Username, params.UserSignup.Email, params.UserSignup.Password)
 		if err != nil {
-			return authentication.NewPostV1BomondVnAuthSignInBadRequest().WithPayload(&models.ErrorResult{
+			return authentication.NewPostV1BomondVnAuthSignUpBadRequest().WithPayload(&models.ErrorResult{
 				Code:      "500",
 				DebugInfo: err.Error(),
 				Message:   "sign up problem",
@@ -22,7 +22,7 @@ func SignUpHandler(service service.Authorization) authentication.PostV1BomondVnA
 			})
 		}
 
-		return authentication.NewPostV1BomondVnAuthSignInOK().WithPayload(&models.SuccessResponse{
+		return authentication.NewPostV1BomondVnAuthSignUpOK().WithPayload(&models.SuccessResponse{
 			Code:      "200",
 			Data:      id,
 			Message:   "Success",

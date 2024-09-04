@@ -16,8 +16,13 @@ func NewAuthorizationRepository(db *sqlx.DB) *AuthorizationRepository {
 	return &AuthorizationRepository{db: db}
 }
 
-func (a AuthorizationRepository) GetUser(username, password string) (models.User, error) {
-	panic("implement me")
+func (a AuthorizationRepository) GetUser(email, password string) (models.User, error) {
+	var user models.User
+
+	query := fmt.Sprintf("SELECT id FROM %s WHERE email=$1 AND password=$2", UsersTable)
+	err := a.db.Get(&user, query, email, password)
+
+	return user, err
 }
 
 func (a AuthorizationRepository) SignUp(username, email, password string) (int, error) {

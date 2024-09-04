@@ -10,9 +10,9 @@ import (
 
 type Authorization interface {
 	SignUp(username, email, password string) (int, error)
-	SignIn(email, password string) (int, error)
+	SignIn(email, password string) (string, error)
 	Logout(id int) error
-	GenerateToken(username, password string) (string, error)
+	GenerateToken(email, password string) (string, error)
 	ParseToken(token string) (int, error)
 }
 
