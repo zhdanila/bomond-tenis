@@ -6,10 +6,6 @@ type Environment struct {
 	HttpPort int    `env:"HTTP_PORT" required:"true" default:"8080"`
 	HttpHost string `env:"HTTP_HOST" required:"true" default:"localhost"`
 
-	PGDB
-}
-
-type PGDB struct {
 	PGDBHost     string `env:"PG_DB_SERVER" required:"true" default:"192.168.1.242"`
 	PGDBPort     int    `env:"PG_DB_PORT" required:"true"  default:"5432"`
 	PGDBName     string `env:"PG_DB_NAME" required:"true"  default:"editor"`

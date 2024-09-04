@@ -3,12 +3,13 @@ package auth
 import (
 	"bomond-tenis/internal/api/models"
 	"bomond-tenis/internal/api/restapi/operations/authentication"
+	"bomond-tenis/internal/service"
 	"fmt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 )
 
-func SignUpHandler() authentication.PostV1BomondVnAuthSignUpHandlerFunc {
+func SignUpHandler(service service.Authorization) authentication.PostV1BomondVnAuthSignUpHandlerFunc {
 	return func(params authentication.PostV1BomondVnAuthSignUpParams) middleware.Responder {
 		fmt.Println("sign up")
 

@@ -12,6 +12,7 @@ import (
 	"github.com/caarlos0/env"
 	"github.com/go-openapi/loads"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 
 	"github.com/rs/zerolog/log"
 )

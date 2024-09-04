@@ -3,12 +3,13 @@ package courts
 import (
 	"bomond-tenis/internal/api/models"
 	"bomond-tenis/internal/api/restapi/operations/courts"
+	"bomond-tenis/internal/service"
 	"fmt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 )
 
-func PostCourtHandler() courts.PostV1BomondVnCourtIDBookHandlerFunc {
+func PostCourtHandler(service service.Courts) courts.PostV1BomondVnCourtIDBookHandlerFunc {
 	return func(params courts.PostV1BomondVnCourtIDBookParams) middleware.Responder {
 		fmt.Println("post court")
 

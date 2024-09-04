@@ -3,12 +3,13 @@ package users
 import (
 	"bomond-tenis/internal/api/models"
 	"bomond-tenis/internal/api/restapi/operations/users"
+	"bomond-tenis/internal/service"
 	"fmt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 )
 
-func DeleteUserHandler() users.DeleteV1BomondVnUsersUserIDHandlerFunc {
+func DeleteUserHandler(service service.Users) users.DeleteV1BomondVnUsersUserIDHandlerFunc {
 	return func(params users.DeleteV1BomondVnUsersUserIDParams) middleware.Responder {
 		fmt.Println("delete")
 

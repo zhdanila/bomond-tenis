@@ -3,12 +3,13 @@ package courts
 import (
 	"bomond-tenis/internal/api/models"
 	"bomond-tenis/internal/api/restapi/operations/courts"
+	"bomond-tenis/internal/service"
 	"fmt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 )
 
-func DeleteCourtHandler() courts.DeleteV1BomondVnCourtIDBookBookIDHandlerFunc {
+func DeleteCourtHandler(service service.Courts) courts.DeleteV1BomondVnCourtIDBookBookIDHandlerFunc {
 	return func(params courts.DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder {
 		fmt.Println("delete court")
 

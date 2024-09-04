@@ -3,12 +3,13 @@ package auth
 import (
 	"bomond-tenis/internal/api/models"
 	"bomond-tenis/internal/api/restapi/operations/authentication"
+	"bomond-tenis/internal/service"
 	"fmt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 )
 
-func LogoutHandler() authentication.PostV1BomondVnAuthLogoutHandlerFunc {
+func LogoutHandler(service service.Authorization) authentication.PostV1BomondVnAuthLogoutHandlerFunc {
 	return func(params authentication.PostV1BomondVnAuthLogoutParams) middleware.Responder {
 		fmt.Println("logout")
 

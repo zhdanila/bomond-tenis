@@ -3,12 +3,13 @@ package users
 import (
 	"bomond-tenis/internal/api/models"
 	"bomond-tenis/internal/api/restapi/operations/users"
+	"bomond-tenis/internal/service"
 	"fmt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 )
 
-func PutUserHandler() users.PutV1BomondVnUsersUserIDHandlerFunc {
+func PutUserHandler(service service.Users) users.PutV1BomondVnUsersUserIDHandlerFunc {
 	return func(params users.PutV1BomondVnUsersUserIDParams) middleware.Responder {
 		fmt.Println("put")
 
