@@ -5,10 +5,11 @@ import (
 	"bomond-tenis/internal/handlers/auth"
 	"bomond-tenis/internal/handlers/courts"
 	"bomond-tenis/internal/handlers/users"
+	"bomond-tenis/internal/service"
 )
 
-// func ConfigureHandlers(api *operations.BomondTenisAPI, userService *service.UserService) {
-func ConfigureHandlers(api *operations.BomondTenisAPI) {
+// func ConfigureHandlers(api *operations.BomondTenisAPI, userService *repository.UserService) {
+func ConfigureHandlers(api *operations.BomondTenisAPI, service *service.Service) {
 	//Users
 	api.UsersGetV1BomondVnUsersUserIDHandler = users.GetUserHandler()
 	api.UsersPutV1BomondVnUsersUserIDHandler = users.PutUserHandler()

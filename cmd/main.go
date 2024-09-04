@@ -5,6 +5,9 @@ import (
 	"bomond-tenis/internal/api/restapi/operations"
 	config "bomond-tenis/internal/config"
 	"bomond-tenis/internal/handlers"
+	"bomond-tenis/internal/repository"
+	"bomond-tenis/internal/service"
+	"bomond-tenis/pkg/utils"
 	"context"
 	"github.com/caarlos0/env"
 	"github.com/go-openapi/loads"
@@ -41,7 +44,26 @@ func main() {
 	}
 
 	api := operations.NewBomondTenisAPI(swaggerSpec)
-	handlers.ConfigureHandlers(api)
+
+	pool, err := utils.NewPostgresDB(cfg.PGDBHost,
+		cfg.PGDBUser,
+		cfg.PGDBName,
+		cfg.PGDBPassword,
+		cfg.PGDBSslMode,
+		cfg.PGDBPort,
+	)
+	if err != nil {
+		log.Panic().Err(err).Msgf("failed to connect to db")
+	}
+	defer func() {
+		if err := pool.Close(); err != nil {
+			log.Error().Err(err).Msgf("failed to properly close db conn")
+		}
+	}()
+
+	repo := repository.NewRepository(pool)
+	services := service.NewService(repo)
+	handlers.ConfigureHandlers(api, services)
 	server := restapi.NewServer(api)
 	defer server.Shutdown()
 
@@ -103,7 +125,7 @@ func main() {
 	//	errs <- serverHttp.Serve()
 	//}()
 	//
-	//log.Info().Msg("service started")
+	//log.Info().Msg("repository started")
 	//err = <-errs
 	//log.Err(err).Msg("trying to shutdown gracefully")
 	//
