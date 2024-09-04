@@ -9,7 +9,7 @@ import (
 	"github.com/go-openapi/strfmt"
 )
 
-func SignInHandler(service service.Authorization) authentication.PostV1BomondVnAuthSignInHandlerFunc {
+func SignInHandler(authService service.Authorization, usersService service.Users) authentication.PostV1BomondVnAuthSignInHandlerFunc {
 	return func(params authentication.PostV1BomondVnAuthSignInParams) middleware.Responder {
 		fmt.Println("sign in")
 

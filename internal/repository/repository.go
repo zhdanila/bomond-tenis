@@ -12,10 +12,11 @@ type Authorization interface {
 	SignUp(username, email, password string) (int, error)
 	SignIn(email, password string) (int, error)
 	Logout(id int) error
+	GetUser(username, password string) (models.User, error)
 }
 
 type Users interface {
-	GetUser(id int) (models.User, error)
+	GetUserById(id int) (models.User, error)
 	UpdateUser(id int, user models.User) error
 	DeleteUser(id int) error
 }

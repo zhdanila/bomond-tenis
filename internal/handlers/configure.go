@@ -15,7 +15,7 @@ func ConfigureHandlers(api *operations.BomondTenisAPI, service *service.Service)
 	api.UsersDeleteV1BomondVnUsersUserIDHandler = users.DeleteUserHandler(service.Users)
 
 	//Authentication
-	api.AuthenticationPostV1BomondVnAuthSignInHandler = auth.SignInHandler(service.Authorization)
+	api.AuthenticationPostV1BomondVnAuthSignInHandler = auth.SignInHandler(service.Authorization, service.Users)
 	api.AuthenticationPostV1BomondVnAuthSignUpHandler = auth.SignUpHandler(service.Authorization)
 	api.AuthenticationPostV1BomondVnAuthLogoutHandler = auth.LogoutHandler(service.Authorization)
 

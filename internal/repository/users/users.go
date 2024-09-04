@@ -13,7 +13,7 @@ func NewUserRepository(db *sqlx.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-func (u UserRepository) GetUser(id int) (models.User, error) {
+func (u UserRepository) GetUserById(id int) (models.User, error) {
 	panic("implement me")
 }
 

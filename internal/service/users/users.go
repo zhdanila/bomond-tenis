@@ -13,7 +13,7 @@ func NewUserService(repo repository.Users) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (u *UserService) GetUser(id int) (models.User, error) {
+func (u *UserService) GetUserById(id int) (models.User, error) {
 	panic("")
 }
 
