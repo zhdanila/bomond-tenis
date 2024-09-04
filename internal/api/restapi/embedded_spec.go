@@ -119,6 +119,11 @@ func init() {
         "tags": [
           "Courts"
         ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/Authorization"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Courts list retrieved",
@@ -144,6 +149,9 @@ func init() {
           "Users"
         ],
         "parameters": [
+          {
+            "$ref": "#/parameters/Authorization"
+          },
           {
             "$ref": "#/parameters/UserId"
           }
@@ -171,6 +179,9 @@ func init() {
           "Users"
         ],
         "parameters": [
+          {
+            "$ref": "#/parameters/Authorization"
+          },
           {
             "$ref": "#/parameters/UserId"
           },
@@ -202,6 +213,9 @@ func init() {
         ],
         "parameters": [
           {
+            "$ref": "#/parameters/Authorization"
+          },
+          {
             "$ref": "#/parameters/UserId"
           }
         ],
@@ -231,6 +245,9 @@ func init() {
         ],
         "parameters": [
           {
+            "$ref": "#/parameters/Authorization"
+          },
+          {
             "$ref": "#/parameters/CourtId"
           }
         ],
@@ -257,6 +274,9 @@ func init() {
           "Courts"
         ],
         "parameters": [
+          {
+            "$ref": "#/parameters/Authorization"
+          },
           {
             "$ref": "#/parameters/CourtId"
           },
@@ -289,6 +309,9 @@ func init() {
           "Courts"
         ],
         "parameters": [
+          {
+            "$ref": "#/parameters/Authorization"
+          },
           {
             "$ref": "#/parameters/CourtId"
           },
@@ -372,6 +395,7 @@ func init() {
   "parameters": {
     "Authorization": {
       "type": "string",
+      "description": "JWT token for authorization",
       "name": "Authorization",
       "in": "header",
       "required": true
@@ -491,6 +515,7 @@ func init() {
         "parameters": [
           {
             "type": "string",
+            "description": "JWT token for authorization",
             "name": "Authorization",
             "in": "header",
             "required": true
@@ -607,6 +632,15 @@ func init() {
         "tags": [
           "Courts"
         ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "JWT token for authorization",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "Courts list retrieved",
@@ -632,6 +666,13 @@ func init() {
           "Users"
         ],
         "parameters": [
+          {
+            "type": "string",
+            "description": "JWT token for authorization",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
           {
             "type": "string",
             "name": "user_id",
@@ -662,6 +703,13 @@ func init() {
           "Users"
         ],
         "parameters": [
+          {
+            "type": "string",
+            "description": "JWT token for authorization",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
           {
             "type": "string",
             "name": "user_id",
@@ -712,6 +760,13 @@ func init() {
         "parameters": [
           {
             "type": "string",
+            "description": "JWT token for authorization",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "string",
             "name": "user_id",
             "in": "path",
             "required": true
@@ -744,6 +799,13 @@ func init() {
         "parameters": [
           {
             "type": "string",
+            "description": "JWT token for authorization",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "string",
             "name": "court_id",
             "in": "path",
             "required": true
@@ -772,6 +834,13 @@ func init() {
           "Courts"
         ],
         "parameters": [
+          {
+            "type": "string",
+            "description": "JWT token for authorization",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
           {
             "type": "string",
             "name": "court_id",
@@ -828,6 +897,13 @@ func init() {
           "Courts"
         ],
         "parameters": [
+          {
+            "type": "string",
+            "description": "JWT token for authorization",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
           {
             "type": "string",
             "name": "court_id",
@@ -917,6 +993,7 @@ func init() {
   "parameters": {
     "Authorization": {
       "type": "string",
+      "description": "JWT token for authorization",
       "name": "Authorization",
       "in": "header",
       "required": true

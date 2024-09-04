@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/validate"
 )
 
 // NewDeleteV1BomondVnUsersUserIDParams creates a new DeleteV1BomondVnUsersUserIDParams object
@@ -30,6 +31,11 @@ type DeleteV1BomondVnUsersUserIDParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
+	/*JWT token for authorization
+	  Required: true
+	  In: header
+	*/
+	Authorization string
 	/*
 	  Required: true
 	  In: path
@@ -46,6 +52,10 @@ func (o *DeleteV1BomondVnUsersUserIDParams) BindRequest(r *http.Request, route *
 
 	o.HTTPRequest = r
 
+	if err := o.bindAuthorization(r.Header[http.CanonicalHeaderKey("Authorization")], true, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	rUserID, rhkUserID, _ := route.Params.GetOK("user_id")
 	if err := o.bindUserID(rUserID, rhkUserID, route.Formats); err != nil {
 		res = append(res, err)
@@ -53,6 +63,26 @@ func (o *DeleteV1BomondVnUsersUserIDParams) BindRequest(r *http.Request, route *
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindAuthorization binds and validates parameter Authorization from header.
+func (o *DeleteV1BomondVnUsersUserIDParams) bindAuthorization(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	if !hasKey {
+		return errors.Required("Authorization", "header", rawData)
+	}
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: true
+
+	if err := validate.RequiredString("Authorization", "header", raw); err != nil {
+		return err
+	}
+	o.Authorization = raw
+
 	return nil
 }
 

@@ -31,7 +31,7 @@ type PostV1BomondVnAuthLogoutParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*
+	/*JWT token for authorization
 	  Required: true
 	  In: header
 	*/
