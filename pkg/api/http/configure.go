@@ -4,6 +4,8 @@ import (
 	restapi2 "bomond-tenis/internal/api/restapi"
 	operations2 "bomond-tenis/internal/api/restapi/operations"
 	auth2 "bomond-tenis/pkg/api/http/handlers/auth"
+	"bomond-tenis/pkg/api/http/handlers/courts"
+	"bomond-tenis/pkg/api/http/handlers/users"
 	controller "bomond-tenis/pkg/controller"
 	"context"
 	"fmt"
@@ -30,9 +32,9 @@ func NewServer(host string, port int, ctrl controller.Controller, healthchecks .
 	api := operations2.NewBomondTenisAPI(spec)
 
 	//Users
-	//api.UsersGetV1BomondVnUsersUserIDHandler = users.GetUserHandler(service.Users)
-	//api.UsersPutV1BomondVnUsersUserIDHandler = users.PutUserHandler(service.Users)
-	//api.UsersDeleteV1BomondVnUsersUserIDHandler = users.DeleteUserHandler(service.Users)
+	api.UsersGetV1BomondVnUsersUserIDHandler = users.NewGetUser(ctrl)
+	api.UsersPutV1BomondVnUsersUserIDHandler = users.NewUpdateUser(ctrl)
+	api.UsersDeleteV1BomondVnUsersUserIDHandler = users.NewDeleteUser(ctrl)
 
 	//Authentication
 	api.AuthenticationPostV1BomondVnAuthSignInHandler = auth2.NewSignIn(ctrl)
@@ -40,10 +42,10 @@ func NewServer(host string, port int, ctrl controller.Controller, healthchecks .
 	api.AuthenticationPostV1BomondVnAuthLogoutHandler = auth2.NewLogout(ctrl)
 
 	//Courts
-	//api.CourtsGetV1BomondVnCourtsHandler = courts.GetAllCourtsHandler(service.Courts)
-	//api.CourtsGetV1BomondVnCourtIDBookHandler = courts.GetCourtByIdHandler(service.Courts)
-	//api.CourtsPostV1BomondVnCourtIDBookHandler = courts.PostCourtHandler(service.Courts)
-	//api.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler = courts.DeleteCourtHandler(service.Courts)
+	api.CourtsGetV1BomondVnCourtsHandler = courts.NewGetCourts(ctrl)
+	api.CourtsGetV1BomondVnCourtIDBookHandler = courts.NewGetBookedCourt(ctrl)
+	api.CourtsPostV1BomondVnCourtIDBookHandler = courts.NewBookCourt(ctrl)
+	api.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler = courts.NewCancelCourtBooking(ctrl)
 
 	api.Logger = log.Logger.Printf
 

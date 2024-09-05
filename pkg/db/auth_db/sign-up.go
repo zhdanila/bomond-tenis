@@ -1,7 +1,7 @@
 package auth_db
 
 import (
-	db2 "bomond-tenis/pkg/db"
+	"bomond-tenis/pkg/db/query"
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
@@ -15,7 +15,7 @@ func NewSignUpHandler(pool *sqlx.DB) *signUpHandler {
 	return &signUpHandler{pool: pool}
 }
 
-func (h *signUpHandler) Exec(ctx context.Context, args *db2.SignUpQuery) (err error) {
+func (h *signUpHandler) Exec(ctx context.Context, args *query.SignUpQuery) (err error) {
 	//query := fmt.Sprintf(`INSERT INTO %s (uuid, account, type, parameters, data, status, created_at, send_at)
 	//	VALUES (gen_random_uuid(), :account, :type, :parameters, :data, :status, :created_at, :send_at)
 	//	RETURNING uuid`, NotificationTable)
@@ -42,11 +42,11 @@ func (h *signUpHandler) Exec(ctx context.Context, args *db2.SignUpQuery) (err er
 	//	args.Uuid = uu
 	//}
 
-	fmt.Println("logout")
+	fmt.Println("sign up")
 
 	return nil
 }
 
 func (h *signUpHandler) Context() interface{} {
-	return (*db2.SignUpQuery)(nil)
+	return (*query.SignUpQuery)(nil)
 }

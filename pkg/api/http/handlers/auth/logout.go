@@ -4,7 +4,7 @@ import (
 	models2 "bomond-tenis/internal/api/models"
 	"bomond-tenis/internal/api/restapi/operations/authentication"
 	controller2 "bomond-tenis/pkg/controller"
-	db2 "bomond-tenis/pkg/db"
+	"bomond-tenis/pkg/db/query"
 	"time"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -26,7 +26,7 @@ type LogoutService interface {
 func (h *Logout) Handle(params authentication.PostV1BomondVnAuthLogoutParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
-	q := &db2.LogoutQuery{
+	q := &query.LogoutQuery{
 		Auth: params.Authorization,
 	}
 

@@ -4,7 +4,7 @@ import (
 	models2 "bomond-tenis/internal/api/models"
 	"bomond-tenis/internal/api/restapi/operations/authentication"
 	controller2 "bomond-tenis/pkg/controller"
-	db2 "bomond-tenis/pkg/db"
+	"bomond-tenis/pkg/db/query"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"time"
@@ -25,7 +25,7 @@ type SignUpService interface {
 func (h *SignUp) Handle(params authentication.PostV1BomondVnAuthSignUpParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
-	q := &db2.SignUpQuery{
+	q := &query.SignUpQuery{
 		Email:    params.UserSignup.Email,
 		Password: params.UserSignup.Password,
 		Username: params.UserSignup.Username,
