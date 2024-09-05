@@ -7,15 +7,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type logoutHandler struct {
+type signInHandler struct {
 	pool *sqlx.DB
 }
 
-func NewLogoutHandler(pool *sqlx.DB) *logoutHandler {
-	return &logoutHandler{pool: pool}
+func NewSignInHandler(pool *sqlx.DB) *signInHandler {
+	return &signInHandler{pool: pool}
 }
 
-func (h *logoutHandler) Exec(ctx context.Context, args *db2.LogoutQuery) (err error) {
+func (h *signInHandler) Exec(ctx context.Context, args *db2.SignInQuery) (err error) {
 	//query := fmt.Sprintf(`INSERT INTO %s (uuid, account, type, parameters, data, status, created_at, send_at)
 	//	VALUES (gen_random_uuid(), :account, :type, :parameters, :data, :status, :created_at, :send_at)
 	//	RETURNING uuid`, NotificationTable)
@@ -47,6 +47,6 @@ func (h *logoutHandler) Exec(ctx context.Context, args *db2.LogoutQuery) (err er
 	return nil
 }
 
-func (h *logoutHandler) Context() interface{} {
-	return (*db2.LogoutQuery)(nil)
+func (h *signInHandler) Context() interface{} {
+	return (*db2.SignInQuery)(nil)
 }

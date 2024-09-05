@@ -35,8 +35,8 @@ func NewServer(host string, port int, ctrl controller.Controller, healthchecks .
 	//api.UsersDeleteV1BomondVnUsersUserIDHandler = users.DeleteUserHandler(service.Users)
 
 	//Authentication
-	//api.AuthenticationPostV1BomondVnAuthSignInHandler = auth.SignInHandler(service.Authorization)
-	//api.AuthenticationPostV1BomondVnAuthSignUpHandler = auth.SignUpHandler(service.Authorization)
+	api.AuthenticationPostV1BomondVnAuthSignInHandler = auth2.NewSignIn(ctrl)
+	api.AuthenticationPostV1BomondVnAuthSignUpHandler = auth2.NewSignUp(ctrl)
 	api.AuthenticationPostV1BomondVnAuthLogoutHandler = auth2.NewLogout(ctrl)
 
 	//Courts
