@@ -2,17 +2,21 @@ package main
 
 import (
 	"bomond-tenis/internal/api/restapi"
-	"bomond-tenis/internal/api/restapi/operations"
 	config "bomond-tenis/internal/config"
-	"bomond-tenis/internal/handlers"
-	"bomond-tenis/internal/repository"
-	"bomond-tenis/internal/service"
+	"bomond-tenis/pkg/api/http"
+	"bomond-tenis/pkg/controller"
+	"bomond-tenis/pkg/controller/configure"
 	"bomond-tenis/pkg/utils"
 	"context"
+	"fmt"
 	"github.com/caarlos0/env"
-	"github.com/go-openapi/loads"
+	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 
 	"github.com/rs/zerolog/log"
 )
@@ -24,7 +28,7 @@ const (
 func main() {
 	var err error
 	var cfg config.Environment
-	//var wg sync.WaitGroup
+	var wg sync.WaitGroup
 
 	err = godotenv.Load()
 	if err != nil {
@@ -39,14 +43,8 @@ func main() {
 	log.Logger = config.InitLog(appName, "debug")
 	ctx = log.Logger.WithContext(ctx)
 
-	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
-	if err != nil {
-		log.Panic().Err(err).Msg("failed to load swagger spec")
-	}
-
-	api := operations.NewBomondTenisAPI(swaggerSpec)
-
-	pool, err := utils.NewPostgresDB(cfg.PGDBHost,
+	var pool *sqlx.DB
+	pool, err = utils.NewPostgresDB(cfg.PGDBHost,
 		cfg.PGDBUser,
 		cfg.PGDBName,
 		cfg.PGDBPassword,
@@ -62,91 +60,58 @@ func main() {
 		}
 	}()
 
-	repo := repository.NewRepository(pool)
-	services := service.NewService(repo)
-	handlers.ConfigureHandlers(api, services)
-	server := restapi.NewServer(api)
-	defer server.Shutdown()
+	ctrlImpl := controller.New()
+	ctrl := wrapController(ctrlImpl)
 
-	server.ConfigureFlags()
-	server.ConfigureAPI()
-
-	server.Host = cfg.HttpHost
-	server.Port = cfg.HttpPort
-
-	if err := server.Serve(); err != nil {
-		log.Panic().Err(err).Msg("failed to run server")
+	log.Info().Msg("configure controller")
+	if err := configure.ControllerInit(
+		ctrlImpl,
+		ctrl,
+		pool,
+		cfg,
+	); err != nil {
+		log.Panic().Err(err).Msg("failed to configure controller")
 	}
 
-	//var pool *sqlx.DB
-	//pool, err = utils.NewPostgresDB(cfg.PGDBHost,
-	//	cfg.PGDBUser,
-	//	cfg.PGDBName,
-	//	cfg.PGDBPassword,
-	//	cfg.PGDBSslMode,
-	//	cfg.PGDBPort,
-	//)
-	//if err != nil {
-	//	log.Panic().Err(err).Msgf("failed to connect to db")
-	//}
-	//defer func() {
-	//	if err := pool.Close(); err != nil {
-	//		log.Error().Err(err).Msgf("failed to properly close db conn")
-	//	}
-	//}()
-	//
-	//ctrlImpl := controller.New()
-	//ctrl := wrapController(ctrlImpl)
-	//
-	//log.Info().Msg("configure controller")
-	//if err := configure.ControllerInit(
-	//	ctrlImpl,
-	//	ctrl,
-	//	pool,
-	//	cfg,
-	//); err != nil {
-	//	log.Panic().Err(err).Msg("failed to configure controller")
-	//}
+	var serverHttp *restapi.Server
+	if serverHttp, err = http.NewServer("", 8080, ctrl,
+		func(ctx context.Context) error {
+			return pool.PingContext(ctx)
+		},
+	); err != nil {
+		log.Panic().Err(err).Msg("unable to create http server")
+	}
 
-	//var serverHttp *restapi.Server
-	//if serverHttp, err = restapi.NewServer("", 8080, ctrl,
-	//	func(ctx context.Context) error {
-	//		return pool.PingContext(ctx)
-	//	},
-	//); err != nil {
-	//	log.Panic().Err(err).Msg("unable to create http server")
-	//}
-	//
-	//errs := make(chan error, 4)
-	//go waitInterruptSignal(errs)
-	//
-	//wg.Add(1)
-	//go func() {
-	//	defer wg.Done()
-	//	errs <- serverHttp.Serve()
-	//}()
-	//
-	//log.Info().Msg("repository started")
-	//err = <-errs
-	//log.Err(err).Msg("trying to shutdown gracefully")
-	//
-	//wg.Add(1)
-	//go func() {
-	//	defer wg.Done()
-	//	err := serverHttp.Shutdown()
-	//	log.Err(err).Msg("http server stopped")
-	//}()
+	errs := make(chan error, 4)
+	go waitInterruptSignal(errs)
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		errs <- serverHttp.Serve()
+	}()
+
+	log.Info().Msg("service started")
+	err = <-errs
+	log.Err(err).Msg("trying to shutdown gracefully")
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		err := serverHttp.Shutdown()
+		log.Err(err).Msg("http server stopped")
+	}()
 }
 
-//func waitInterruptSignal(errs chan<- error) {
-//	c := make(chan os.Signal, 3)
-//	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
-//	errs <- fmt.Errorf("%s", <-c)
-//	signal.Stop(c)
-//}
-//
-//func wrapController(next controller.Controller) controller.Controller {
-//	return controller.RecoveryMiddleware(
-//		next,
-//	)
-//}
+func waitInterruptSignal(errs chan<- error) {
+	c := make(chan os.Signal, 3)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+	errs <- fmt.Errorf("%s", <-c)
+	signal.Stop(c)
+}
+
+func wrapController(next controller.Controller) controller.Controller {
+	return controller.RecoveryMiddleware(
+		next,
+	)
+}
