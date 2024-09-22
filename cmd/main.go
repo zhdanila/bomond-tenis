@@ -13,7 +13,6 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	redis2 "github.com/redis/go-redis/v9"
 	"os"
 	"os/signal"
 	"sync"
@@ -23,7 +22,7 @@ import (
 )
 
 const (
-	appName = "Bomond-tenis"
+	appName = "MarketEvents"
 )
 
 func main() {
@@ -44,9 +43,8 @@ func main() {
 	log.Logger = config.InitLog(appName, "debug")
 	ctx = log.Logger.WithContext(ctx)
 
-	var postgres *sqlx.DB
-	postgres, err = utils.NewPostgresDB(
-		cfg.PGDBHost,
+	var pool *sqlx.DB
+	pool, err = utils.NewPostgresDB(cfg.PGDBHost,
 		cfg.PGDBUser,
 		cfg.PGDBName,
 		cfg.PGDBPassword,
@@ -54,27 +52,11 @@ func main() {
 		cfg.PGDBPort,
 	)
 	if err != nil {
-		log.Panic().Err(err).Msgf("failed to connect to postgreSQL db")
+		log.Panic().Err(err).Msgf("failed to connect to db")
 	}
 	defer func() {
-		if err := postgres.Close(); err != nil {
-			log.Error().Err(err).Msgf("failed to properly close postgreSQL db conn")
-		}
-	}()
-
-	var redis *redis2.Client
-	redis, err = utils.NewRedisDB(
-		ctx,
-		cfg.RedisHost,
-		cfg.RedisPort,
-		cfg.RedisPassword,
-	)
-	if err != nil {
-		log.Panic().Err(err).Msgf("failed to connect to redis db")
-	}
-	defer func() {
-		if err := redis.Close(); err != nil {
-			log.Error().Err(err).Msgf("failed to properly close redis db conn")
+		if err := pool.Close(); err != nil {
+			log.Error().Err(err).Msgf("failed to properly close db conn")
 		}
 	}()
 
@@ -85,7 +67,7 @@ func main() {
 	if err := configure.ControllerInit(
 		ctrlImpl,
 		ctrl,
-		postgres,
+		pool,
 		cfg,
 	); err != nil {
 		log.Panic().Err(err).Msg("failed to configure controller")
@@ -94,7 +76,7 @@ func main() {
 	var serverHttp *restapi.Server
 	if serverHttp, err = http.NewServer("", 8080, ctrl,
 		func(ctx context.Context) error {
-			return postgres.PingContext(ctx)
+			return pool.PingContext(ctx)
 		},
 	); err != nil {
 		log.Panic().Err(err).Msg("unable to create http server")

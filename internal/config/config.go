@@ -12,8 +12,4 @@ type Environment struct {
 	PGDBUser     string `env:"PG_DB_USER" required:"true"  default:"orc"`
 	PGDBPassword string `env:"PG_DB_PASS" required:"true"  default:"pAEiYSOu04"`
 	PGDBSslMode  string `env:"PG_DB_SSLMODE" required:"true"  default:"disabled"`
-
-	RedisHost     string `env:"REDIS_SERVER" required:"true" default:"192.168.1.242"`
-	RedisPort     string `env:"REDIS_HOST" required:"true" default:"6380"`
-	RedisPassword string `env:"REDIS_PASSWORD" required:"true" default:"qwerty"`
 }
