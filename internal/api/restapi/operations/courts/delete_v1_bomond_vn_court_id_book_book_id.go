@@ -12,16 +12,16 @@ import (
 )
 
 // DeleteV1BomondVnCourtIDBookBookIDHandlerFunc turns a function with the right signature into a delete v1 bomond vn court ID book book ID handler
-type DeleteV1BomondVnCourtIDBookBookIDHandlerFunc func(DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder
+type DeleteV1BomondVnCourtIDBookBookIDHandlerFunc func(DeleteV1BomondVnCourtIDBookBookIDParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn DeleteV1BomondVnCourtIDBookBookIDHandlerFunc) Handle(params DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder {
-	return fn(params)
+func (fn DeleteV1BomondVnCourtIDBookBookIDHandlerFunc) Handle(params DeleteV1BomondVnCourtIDBookBookIDParams, principal interface{}) middleware.Responder {
+	return fn(params, principal)
 }
 
 // DeleteV1BomondVnCourtIDBookBookIDHandler interface for that can handle valid delete v1 bomond vn court ID book book ID params
 type DeleteV1BomondVnCourtIDBookBookIDHandler interface {
-	Handle(DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder
+	Handle(DeleteV1BomondVnCourtIDBookBookIDParams, interface{}) middleware.Responder
 }
 
 // NewDeleteV1BomondVnCourtIDBookBookID creates a new http.Handler for the delete v1 bomond vn court ID book book ID operation
@@ -45,12 +45,25 @@ func (o *DeleteV1BomondVnCourtIDBookBookID) ServeHTTP(rw http.ResponseWriter, r 
 		*r = *rCtx
 	}
 	var Params = NewDeleteV1BomondVnCourtIDBookBookIDParams()
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		*r = *aCtx
+	}
+	var principal interface{}
+	if uprinc != nil {
+		principal = uprinc.(interface{}) // this is really a interface{}, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
 }

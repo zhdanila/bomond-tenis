@@ -12,16 +12,16 @@ import (
 )
 
 // PostV1BomondVnAuthLogoutHandlerFunc turns a function with the right signature into a post v1 bomond vn auth logout handler
-type PostV1BomondVnAuthLogoutHandlerFunc func(PostV1BomondVnAuthLogoutParams) middleware.Responder
+type PostV1BomondVnAuthLogoutHandlerFunc func(PostV1BomondVnAuthLogoutParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PostV1BomondVnAuthLogoutHandlerFunc) Handle(params PostV1BomondVnAuthLogoutParams) middleware.Responder {
-	return fn(params)
+func (fn PostV1BomondVnAuthLogoutHandlerFunc) Handle(params PostV1BomondVnAuthLogoutParams, principal interface{}) middleware.Responder {
+	return fn(params, principal)
 }
 
 // PostV1BomondVnAuthLogoutHandler interface for that can handle valid post v1 bomond vn auth logout params
 type PostV1BomondVnAuthLogoutHandler interface {
-	Handle(PostV1BomondVnAuthLogoutParams) middleware.Responder
+	Handle(PostV1BomondVnAuthLogoutParams, interface{}) middleware.Responder
 }
 
 // NewPostV1BomondVnAuthLogout creates a new http.Handler for the post v1 bomond vn auth logout operation
@@ -45,12 +45,25 @@ func (o *PostV1BomondVnAuthLogout) ServeHTTP(rw http.ResponseWriter, r *http.Req
 		*r = *rCtx
 	}
 	var Params = NewPostV1BomondVnAuthLogoutParams()
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		*r = *aCtx
+	}
+	var principal interface{}
+	if uprinc != nil {
+		principal = uprinc.(interface{}) // this is really a interface{}, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
 }

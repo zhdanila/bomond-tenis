@@ -12,16 +12,16 @@ import (
 )
 
 // GetV1BomondVnCourtIDBookHandlerFunc turns a function with the right signature into a get v1 bomond vn court ID book handler
-type GetV1BomondVnCourtIDBookHandlerFunc func(GetV1BomondVnCourtIDBookParams) middleware.Responder
+type GetV1BomondVnCourtIDBookHandlerFunc func(GetV1BomondVnCourtIDBookParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetV1BomondVnCourtIDBookHandlerFunc) Handle(params GetV1BomondVnCourtIDBookParams) middleware.Responder {
-	return fn(params)
+func (fn GetV1BomondVnCourtIDBookHandlerFunc) Handle(params GetV1BomondVnCourtIDBookParams, principal interface{}) middleware.Responder {
+	return fn(params, principal)
 }
 
 // GetV1BomondVnCourtIDBookHandler interface for that can handle valid get v1 bomond vn court ID book params
 type GetV1BomondVnCourtIDBookHandler interface {
-	Handle(GetV1BomondVnCourtIDBookParams) middleware.Responder
+	Handle(GetV1BomondVnCourtIDBookParams, interface{}) middleware.Responder
 }
 
 // NewGetV1BomondVnCourtIDBook creates a new http.Handler for the get v1 bomond vn court ID book operation
@@ -45,12 +45,25 @@ func (o *GetV1BomondVnCourtIDBook) ServeHTTP(rw http.ResponseWriter, r *http.Req
 		*r = *rCtx
 	}
 	var Params = NewGetV1BomondVnCourtIDBookParams()
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		*r = *aCtx
+	}
+	var principal interface{}
+	if uprinc != nil {
+		principal = uprinc.(interface{}) // this is really a interface{}, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
 }

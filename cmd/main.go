@@ -74,7 +74,7 @@ func main() {
 	}
 
 	var serverHttp *restapi.Server
-	if serverHttp, err = http.NewServer("", 8080, ctrl,
+	if serverHttp, err = http.NewServer("", cfg.HttpPort, ctrl,
 		func(ctx context.Context) error {
 			return pool.PingContext(ctx)
 		},

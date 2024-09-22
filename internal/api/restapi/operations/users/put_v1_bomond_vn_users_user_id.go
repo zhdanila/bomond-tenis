@@ -15,16 +15,16 @@ import (
 )
 
 // PutV1BomondVnUsersUserIDHandlerFunc turns a function with the right signature into a put v1 bomond vn users user ID handler
-type PutV1BomondVnUsersUserIDHandlerFunc func(PutV1BomondVnUsersUserIDParams) middleware.Responder
+type PutV1BomondVnUsersUserIDHandlerFunc func(PutV1BomondVnUsersUserIDParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PutV1BomondVnUsersUserIDHandlerFunc) Handle(params PutV1BomondVnUsersUserIDParams) middleware.Responder {
-	return fn(params)
+func (fn PutV1BomondVnUsersUserIDHandlerFunc) Handle(params PutV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
+	return fn(params, principal)
 }
 
 // PutV1BomondVnUsersUserIDHandler interface for that can handle valid put v1 bomond vn users user ID params
 type PutV1BomondVnUsersUserIDHandler interface {
-	Handle(PutV1BomondVnUsersUserIDParams) middleware.Responder
+	Handle(PutV1BomondVnUsersUserIDParams, interface{}) middleware.Responder
 }
 
 // NewPutV1BomondVnUsersUserID creates a new http.Handler for the put v1 bomond vn users user ID operation
@@ -48,12 +48,25 @@ func (o *PutV1BomondVnUsersUserID) ServeHTTP(rw http.ResponseWriter, r *http.Req
 		*r = *rCtx
 	}
 	var Params = NewPutV1BomondVnUsersUserIDParams()
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		*r = *aCtx
+	}
+	var principal interface{}
+	if uprinc != nil {
+		principal = uprinc.(interface{}) // this is really a interface{}, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
 }

@@ -46,22 +46,22 @@ func NewBomondTenisAPI(spec *loads.Document) *BomondTenisAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
-		CourtsDeleteV1BomondVnCourtIDBookBookIDHandler: courts.DeleteV1BomondVnCourtIDBookBookIDHandlerFunc(func(params courts.DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder {
+		CourtsDeleteV1BomondVnCourtIDBookBookIDHandler: courts.DeleteV1BomondVnCourtIDBookBookIDHandlerFunc(func(params courts.DeleteV1BomondVnCourtIDBookBookIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation courts.DeleteV1BomondVnCourtIDBookBookID has not yet been implemented")
 		}),
-		UsersDeleteV1BomondVnUsersUserIDHandler: users.DeleteV1BomondVnUsersUserIDHandlerFunc(func(params users.DeleteV1BomondVnUsersUserIDParams) middleware.Responder {
+		UsersDeleteV1BomondVnUsersUserIDHandler: users.DeleteV1BomondVnUsersUserIDHandlerFunc(func(params users.DeleteV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation users.DeleteV1BomondVnUsersUserID has not yet been implemented")
 		}),
-		CourtsGetV1BomondVnCourtIDBookHandler: courts.GetV1BomondVnCourtIDBookHandlerFunc(func(params courts.GetV1BomondVnCourtIDBookParams) middleware.Responder {
+		CourtsGetV1BomondVnCourtIDBookHandler: courts.GetV1BomondVnCourtIDBookHandlerFunc(func(params courts.GetV1BomondVnCourtIDBookParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation courts.GetV1BomondVnCourtIDBook has not yet been implemented")
 		}),
-		CourtsGetV1BomondVnCourtsHandler: courts.GetV1BomondVnCourtsHandlerFunc(func(params courts.GetV1BomondVnCourtsParams) middleware.Responder {
+		CourtsGetV1BomondVnCourtsHandler: courts.GetV1BomondVnCourtsHandlerFunc(func(params courts.GetV1BomondVnCourtsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation courts.GetV1BomondVnCourts has not yet been implemented")
 		}),
-		UsersGetV1BomondVnUsersUserIDHandler: users.GetV1BomondVnUsersUserIDHandlerFunc(func(params users.GetV1BomondVnUsersUserIDParams) middleware.Responder {
+		UsersGetV1BomondVnUsersUserIDHandler: users.GetV1BomondVnUsersUserIDHandlerFunc(func(params users.GetV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation users.GetV1BomondVnUsersUserID has not yet been implemented")
 		}),
-		AuthenticationPostV1BomondVnAuthLogoutHandler: authentication.PostV1BomondVnAuthLogoutHandlerFunc(func(params authentication.PostV1BomondVnAuthLogoutParams) middleware.Responder {
+		AuthenticationPostV1BomondVnAuthLogoutHandler: authentication.PostV1BomondVnAuthLogoutHandlerFunc(func(params authentication.PostV1BomondVnAuthLogoutParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation authentication.PostV1BomondVnAuthLogout has not yet been implemented")
 		}),
 		AuthenticationPostV1BomondVnAuthSignInHandler: authentication.PostV1BomondVnAuthSignInHandlerFunc(func(params authentication.PostV1BomondVnAuthSignInParams) middleware.Responder {
@@ -70,12 +70,19 @@ func NewBomondTenisAPI(spec *loads.Document) *BomondTenisAPI {
 		AuthenticationPostV1BomondVnAuthSignUpHandler: authentication.PostV1BomondVnAuthSignUpHandlerFunc(func(params authentication.PostV1BomondVnAuthSignUpParams) middleware.Responder {
 			return middleware.NotImplemented("operation authentication.PostV1BomondVnAuthSignUp has not yet been implemented")
 		}),
-		CourtsPostV1BomondVnCourtIDBookHandler: courts.PostV1BomondVnCourtIDBookHandlerFunc(func(params courts.PostV1BomondVnCourtIDBookParams) middleware.Responder {
+		CourtsPostV1BomondVnCourtIDBookHandler: courts.PostV1BomondVnCourtIDBookHandlerFunc(func(params courts.PostV1BomondVnCourtIDBookParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation courts.PostV1BomondVnCourtIDBook has not yet been implemented")
 		}),
-		UsersPutV1BomondVnUsersUserIDHandler: users.PutV1BomondVnUsersUserIDHandlerFunc(func(params users.PutV1BomondVnUsersUserIDParams) middleware.Responder {
+		UsersPutV1BomondVnUsersUserIDHandler: users.PutV1BomondVnUsersUserIDHandlerFunc(func(params users.PutV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation users.PutV1BomondVnUsersUserID has not yet been implemented")
 		}),
+
+		// Applies when the "Authorization" header is set
+		BearerAuth: func(token string) (interface{}, error) {
+			return nil, errors.NotImplemented("api key auth (Bearer) Authorization from header param [Authorization] has not yet been implemented")
+		},
+		// default authorizer is authorized meaning no requests are blocked
+		APIAuthorizer: security.Authorized(),
 	}
 }
 
@@ -111,6 +118,13 @@ type BomondTenisAPI struct {
 	// JSONProducer registers a producer for the following mime types:
 	//   - application/json
 	JSONProducer runtime.Producer
+
+	// BearerAuth registers a function that takes a token and returns a principal
+	// it performs authentication based on an api key Authorization provided in the header
+	BearerAuth func(string) (interface{}, error)
+
+	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
+	APIAuthorizer runtime.Authorizer
 
 	// CourtsDeleteV1BomondVnCourtIDBookBookIDHandler sets the operation handler for the delete v1 bomond vn court ID book book ID operation
 	CourtsDeleteV1BomondVnCourtIDBookBookIDHandler courts.DeleteV1BomondVnCourtIDBookBookIDHandler
@@ -209,6 +223,10 @@ func (o *BomondTenisAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.BearerAuth == nil {
+		unregistered = append(unregistered, "AuthorizationAuth")
+	}
+
 	if o.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler == nil {
 		unregistered = append(unregistered, "courts.DeleteV1BomondVnCourtIDBookBookIDHandler")
 	}
@@ -254,12 +272,21 @@ func (o *BomondTenisAPI) ServeErrorFor(operationID string) func(http.ResponseWri
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
 func (o *BomondTenisAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
-	return nil
+	result := make(map[string]runtime.Authenticator)
+	for name := range schemes {
+		switch name {
+		case "Bearer":
+			scheme := schemes[name]
+			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, o.BearerAuth)
+
+		}
+	}
+	return result
 }
 
 // Authorizer returns the registered authorizer
 func (o *BomondTenisAPI) Authorizer() runtime.Authorizer {
-	return nil
+	return o.APIAuthorizer
 }
 
 // ConsumersFor gets the consumers for the specified media types.

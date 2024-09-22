@@ -4,7 +4,7 @@
 //
 //	Schemes:
 //	  http
-//	Host: localhost
+//	Host: bomond.vn
 //	BasePath: /
 //	Version: 1.0.0
 //

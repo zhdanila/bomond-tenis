@@ -18,14 +18,29 @@ var (
 
 func init() {
 	SwaggerJSON = json.RawMessage([]byte(`{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
   "swagger": "2.0",
   "info": {
     "title": "bomond-tenis",
     "version": "1.0.0"
   },
+  "host": "bomond.vn",
   "paths": {
     "/v1/bomond.vn/auth/logout": {
       "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -113,6 +128,11 @@ func init() {
     },
     "/v1/bomond.vn/courts": {
       "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -142,6 +162,11 @@ func init() {
     },
     "/v1/bomond.vn/users/{user_id}": {
       "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -172,6 +197,11 @@ func init() {
         }
       },
       "put": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -205,6 +235,11 @@ func init() {
         }
       },
       "delete": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -237,6 +272,11 @@ func init() {
     },
     "/v1/bomond.vn/{court_id}/book": {
       "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -267,6 +307,11 @@ func init() {
         }
       },
       "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -302,6 +347,11 @@ func init() {
     },
     "/v1/bomond.vn/{court_id}/book/{book_id}": {
       "delete": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -495,17 +545,39 @@ func init() {
         }
       }
     }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
   }
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
   "swagger": "2.0",
   "info": {
     "title": "bomond-tenis",
     "version": "1.0.0"
   },
+  "host": "bomond.vn",
   "paths": {
     "/v1/bomond.vn/auth/logout": {
       "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -626,6 +698,11 @@ func init() {
     },
     "/v1/bomond.vn/courts": {
       "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -659,6 +736,11 @@ func init() {
     },
     "/v1/bomond.vn/users/{user_id}": {
       "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -696,6 +778,11 @@ func init() {
         }
       },
       "put": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -751,6 +838,11 @@ func init() {
         }
       },
       "delete": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -790,6 +882,11 @@ func init() {
     },
     "/v1/bomond.vn/{court_id}/book": {
       "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -827,6 +924,11 @@ func init() {
         }
       },
       "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -890,6 +992,11 @@ func init() {
     },
     "/v1/bomond.vn/{court_id}/book/{book_id}": {
       "delete": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -1092,6 +1199,13 @@ func init() {
           }
         }
       }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
     }
   }
 }`))

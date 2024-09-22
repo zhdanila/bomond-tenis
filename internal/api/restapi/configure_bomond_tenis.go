@@ -41,32 +41,32 @@ func configureAPI(api *operations.BomondTenisAPI) http.Handler {
 	api.JSONProducer = runtime.JSONProducer()
 
 	if api.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler == nil {
-		api.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler = courts.DeleteV1BomondVnCourtIDBookBookIDHandlerFunc(func(params courts.DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder {
+		api.CourtsDeleteV1BomondVnCourtIDBookBookIDHandler = courts.DeleteV1BomondVnCourtIDBookBookIDHandlerFunc(func(params courts.DeleteV1BomondVnCourtIDBookBookIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation courts.DeleteV1BomondCourtIDBookBookID has not yet been implemented")
 		})
 	}
 	if api.UsersDeleteV1BomondVnUsersUserIDHandler == nil {
-		api.UsersDeleteV1BomondVnUsersUserIDHandler = users.DeleteV1BomondVnUsersUserIDHandlerFunc(func(params users.DeleteV1BomondVnUsersUserIDParams) middleware.Responder {
+		api.UsersDeleteV1BomondVnUsersUserIDHandler = users.DeleteV1BomondVnUsersUserIDHandlerFunc(func(params users.DeleteV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation users.DeleteV1BomondVnUsersUserID has not yet been implemented")
 		})
 	}
 	if api.CourtsGetV1BomondVnCourtsHandler == nil {
-		api.CourtsGetV1BomondVnCourtsHandler = courts.GetV1BomondVnCourtsHandlerFunc(func(params courts.GetV1BomondVnCourtsParams) middleware.Responder {
+		api.CourtsGetV1BomondVnCourtsHandler = courts.GetV1BomondVnCourtsHandlerFunc(func(params courts.GetV1BomondVnCourtsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation courts.GetV1BomondCourts has not yet been implemented")
 		})
 	}
 	if api.CourtsGetV1BomondVnCourtIDBookHandler == nil {
-		api.CourtsGetV1BomondVnCourtIDBookHandler = courts.GetV1BomondVnCourtIDBookHandlerFunc(func(params courts.GetV1BomondVnCourtIDBookParams) middleware.Responder {
+		api.CourtsGetV1BomondVnCourtIDBookHandler = courts.GetV1BomondVnCourtIDBookHandlerFunc(func(params courts.GetV1BomondVnCourtIDBookParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation courts.GetV1BomondVnCourtIDBook has not yet been implemented")
 		})
 	}
 	if api.UsersGetV1BomondVnUsersUserIDHandler == nil {
-		api.UsersGetV1BomondVnUsersUserIDHandler = users.GetV1BomondVnUsersUserIDHandlerFunc(func(params users.GetV1BomondVnUsersUserIDParams) middleware.Responder {
+		api.UsersGetV1BomondVnUsersUserIDHandler = users.GetV1BomondVnUsersUserIDHandlerFunc(func(params users.GetV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation users.GetV1BomondVnUsersUserID has not yet been implemented")
 		})
 	}
 	if api.AuthenticationPostV1BomondVnAuthLogoutHandler == nil {
-		api.AuthenticationPostV1BomondVnAuthLogoutHandler = authentication.PostV1BomondVnAuthLogoutHandlerFunc(func(params authentication.PostV1BomondVnAuthLogoutParams) middleware.Responder {
+		api.AuthenticationPostV1BomondVnAuthLogoutHandler = authentication.PostV1BomondVnAuthLogoutHandlerFunc(func(params authentication.PostV1BomondVnAuthLogoutParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation authentication.PostV1BomondVnAuthLogout has not yet been implemented")
 		})
 	}
@@ -81,12 +81,12 @@ func configureAPI(api *operations.BomondTenisAPI) http.Handler {
 		})
 	}
 	if api.CourtsPostV1BomondVnCourtIDBookHandler == nil {
-		api.CourtsPostV1BomondVnCourtIDBookHandler = courts.PostV1BomondVnCourtIDBookHandlerFunc(func(params courts.PostV1BomondVnCourtIDBookParams) middleware.Responder {
+		api.CourtsPostV1BomondVnCourtIDBookHandler = courts.PostV1BomondVnCourtIDBookHandlerFunc(func(params courts.PostV1BomondVnCourtIDBookParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation courts.PostV1BomondVnCourtIDBook has not yet been implemented")
 		})
 	}
 	if api.UsersPutV1BomondVnUsersUserIDHandler == nil {
-		api.UsersPutV1BomondVnUsersUserIDHandler = users.PutV1BomondVnUsersUserIDHandlerFunc(func(params users.PutV1BomondVnUsersUserIDParams) middleware.Responder {
+		api.UsersPutV1BomondVnUsersUserIDHandler = users.PutV1BomondVnUsersUserIDHandlerFunc(func(params users.PutV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation users.PutV1BomondVnUsersUserID has not yet been implemented")
 		})
 	}

@@ -22,7 +22,7 @@ type CancelCourtBookingService interface {
 	Handle(params courts.DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder
 }
 
-func (h *CancelCourtBooking) Handle(params courts.DeleteV1BomondVnCourtIDBookBookIDParams) middleware.Responder {
+func (h *CancelCourtBooking) Handle(params courts.DeleteV1BomondVnCourtIDBookBookIDParams, principal interface{}) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
 	q := &query.CancelCourtBookingQuery{
