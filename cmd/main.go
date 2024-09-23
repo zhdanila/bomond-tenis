@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	appName = "MarketEvents"
+	appName = "Bomond-tennis"
 )
 
 func main() {

@@ -5,6 +5,7 @@ import (
 	"bomond-tenis/internal/api/restapi/operations/authentication"
 	controller2 "bomond-tenis/pkg/controller"
 	"bomond-tenis/pkg/db/query"
+	"bomond-tenis/pkg/utils"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"time"
@@ -31,7 +32,19 @@ func (h *SignUp) Handle(params authentication.PostV1BomondVnAuthSignUpParams) mi
 		Username: params.UserSignup.Username,
 	}
 
-	err := h.ctrl.Exec(ctx, q)
+	hashedPassword, err := utils.GeneratePasswordHash(q.Password)
+	if err != nil {
+		return authentication.NewPostV1BomondVnAuthSignUpBadRequest().WithPayload(&models2.ErrorResult{
+			Code:      "400",
+			DebugInfo: err.Error(),
+			Message:   "Error hashing password",
+			Status:    400,
+			Timestamp: strfmt.DateTime(time.Now().UTC()),
+		})
+	}
+	q.Password = hashedPassword
+
+	err = h.ctrl.Exec(ctx, q)
 	if err != nil {
 		return authentication.NewPostV1BomondVnAuthSignUpBadRequest().WithPayload(&models2.ErrorResult{
 			Code:      "400",

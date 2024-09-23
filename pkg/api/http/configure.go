@@ -7,6 +7,7 @@ import (
 	"bomond-tenis/pkg/api/http/handlers/courts"
 	"bomond-tenis/pkg/api/http/handlers/users"
 	controller "bomond-tenis/pkg/controller"
+	"bomond-tenis/pkg/utils"
 	"context"
 	"fmt"
 	"net/http"
@@ -30,6 +31,8 @@ func NewServer(host string, port int, ctrl controller.Controller, healthchecks .
 	}
 
 	api := operations2.NewBomondTenisAPI(spec)
+
+	api.BearerAuth = utils.ValidateHeader
 
 	//Users
 	api.UsersGetV1BomondVnUsersUserIDHandler = users.NewGetUser(ctrl)
@@ -61,6 +64,7 @@ func NewServer(host string, port int, ctrl controller.Controller, healthchecks .
 			middlewareHealthz(healthchecks...),
 			middlewareRecover,
 			middlewareLogging,
+			controller.SetupGlobalMiddleware,
 		}
 
 		return setupMiddleware(api.Context().RoutesHandler(builder), middlewares...)

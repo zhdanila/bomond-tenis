@@ -6,6 +6,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+const UsersTable = "Users"
+
 func NewPostgresDB(host, user, dbname, password, sslmode string, port int) (*sqlx.DB, error) {
 	connectUrl := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=%s",
 		host, port, user, dbname, password, sslmode)

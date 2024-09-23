@@ -5,8 +5,11 @@ import (
 	"bomond-tenis/internal/api/restapi/operations/authentication"
 	controller2 "bomond-tenis/pkg/controller"
 	"bomond-tenis/pkg/db/query"
+	"bomond-tenis/pkg/utils"
+	"fmt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
+	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
@@ -26,8 +29,7 @@ func (h *SignIn) Handle(params authentication.PostV1BomondVnAuthSignInParams) mi
 	ctx := params.HTTPRequest.Context()
 
 	q := &query.SignInQuery{
-		Email:    params.UserSignin.Email,
-		Password: params.UserSignin.Password,
+		Email: params.UserSignin.Email,
 	}
 
 	err := h.ctrl.Exec(ctx, q)
@@ -41,9 +43,32 @@ func (h *SignIn) Handle(params authentication.PostV1BomondVnAuthSignInParams) mi
 		})
 	}
 
+	err = bcrypt.CompareHashAndPassword([]byte(q.Out.Account.Password), []byte(params.UserSignin.Password))
+	if err != nil {
+		return authentication.NewPostV1BomondVnAuthSignInBadRequest().WithPayload(&models2.ErrorResult{
+			Code:      "400",
+			DebugInfo: err.Error(),
+			Message:   "Incorrect password",
+			Status:    400,
+			Timestamp: strfmt.DateTime(time.Now().UTC()),
+		})
+	}
+
+	token, err := utils.GenerateJWT(q.Out.Account.Email, q.Out.Account.ID)
+	if err != nil {
+		return authentication.NewPostV1BomondVnAuthSignInBadRequest().WithPayload(&models2.ErrorResult{
+			Code:      "400",
+			DebugInfo: err.Error(),
+			Message:   "Error generating jwt token",
+			Status:    400,
+			Timestamp: strfmt.DateTime(time.Now().UTC()),
+		})
+	}
+
 	return authentication.NewPostV1BomondVnAuthSignInOK().WithPayload(&models2.SuccessResponse{
 		Code:      "200",
 		Message:   "Success",
+		Data:      fmt.Sprintf("token: %s", token),
 		Status:    200,
 		Timestamp: strfmt.DateTime(time.Now().UTC()),
 	})

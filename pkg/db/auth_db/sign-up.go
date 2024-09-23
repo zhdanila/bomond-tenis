@@ -2,6 +2,7 @@ package auth_db
 
 import (
 	"bomond-tenis/pkg/db/query"
+	"bomond-tenis/pkg/utils"
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
@@ -16,33 +17,16 @@ func NewSignUpHandler(pool *sqlx.DB) *signUpHandler {
 }
 
 func (h *signUpHandler) Exec(ctx context.Context, args *query.SignUpQuery) (err error) {
-	//query := fmt.Sprintf(`INSERT INTO %s (uuid, account, type, parameters, data, status, created_at, send_at)
-	//	VALUES (gen_random_uuid(), :account, :type, :parameters, :data, :status, :created_at, :send_at)
-	//	RETURNING uuid`, NotificationTable)
-	//
-	//rows, err := h.pool.NamedQueryContext(ctx, query, params)
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//defer rows.Close()
-	//
-	//for rows.Next() {
-	//	var u string
-	//
-	//	if err = rows.Scan(&u); err != nil {
-	//		return err
-	//	}
-	//
-	//	uu, err := uuid.Parse(u)
-	//	if err != nil {
-	//		return err
-	//	}
-	//
-	//	args.Uuid = uu
-	//}
+	query := fmt.Sprintf(`INSERT INTO %s (email, password, username)
+		VALUES (:email, :password, :username)
+		RETURNING id`, utils.UsersTable)
 
-	fmt.Println("sign up")
+	rows, err := h.pool.NamedQueryContext(ctx, query, args)
+	if err != nil {
+		return err
+	}
+
+	defer rows.Close()
 
 	return nil
 }

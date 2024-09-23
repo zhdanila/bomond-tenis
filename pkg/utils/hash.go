@@ -1,17 +1,13 @@
 package utils
 
 import (
-	"crypto/sha1"
-	"fmt"
+	"golang.org/x/crypto/bcrypt"
 )
 
-const (
-	salt = "*#DJ-03jFP#I@)(ISF#OKR)(Fsdaf9u290J"
-)
-
-func GeneratePasswordHash(password string) string {
-	hash := sha1.New()
-	hash.Write([]byte(password))
-
-	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
+func GeneratePasswordHash(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hashedPassword), nil
 }
