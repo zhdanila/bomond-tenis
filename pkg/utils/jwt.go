@@ -18,7 +18,7 @@ func ValidateHeader(bearerHeader string) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("error decoding token")
 		}
-		return SecretKey, nil
+		return []byte(SecretKey), nil
 	})
 	if err != nil {
 		log.Error().Err(err).Msgf("failed to validate jwt tocken")
