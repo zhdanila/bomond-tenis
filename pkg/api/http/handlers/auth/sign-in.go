@@ -6,10 +6,11 @@ import (
 	controller2 "bomond-tenis/pkg/controller"
 	"bomond-tenis/pkg/db/query"
 	"bomond-tenis/pkg/utils"
-	"fmt"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
 	"time"
 )
 
@@ -65,11 +66,26 @@ func (h *SignIn) Handle(params authentication.PostV1BomondVnAuthSignInParams) mi
 		})
 	}
 
-	return authentication.NewPostV1BomondVnAuthSignInOK().WithPayload(&models2.SuccessResponse{
+	cookie := &http.Cookie{
+		Name:     "Authorization",
+		Value:    token,
+		Path:     "/",
+		Expires:  time.Now().Add(24 * time.Hour), // Термін дії cookie - 24 години
+		HttpOnly: true,                           // HttpOnly для безпеки
+		Secure:   true,                           // Якщо використовується HTTPS, потрібно встановити true
+		SameSite: http.SameSiteStrictMode,        // Політика SameSite
+	}
+
+	originalResponder := authentication.NewPostV1BomondVnAuthSignInOK().WithPayload(&models2.SuccessResponse{
 		Code:      "200",
 		Message:   "Success",
-		Data:      fmt.Sprintf("token: %s", token),
+		Data:      "Token was added in header",
 		Status:    200,
 		Timestamp: strfmt.DateTime(time.Now().UTC()),
+	})
+
+	return middleware.ResponderFunc(func(rw http.ResponseWriter, p runtime.Producer) {
+		http.SetCookie(rw, cookie)
+		originalResponder.WriteResponse(rw, p)
 	})
 }
