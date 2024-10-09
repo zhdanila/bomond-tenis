@@ -23,12 +23,10 @@ type LogoutService interface {
 	Handle(params authentication.PostV1BomondVnAuthLogoutParams) middleware.Responder
 }
 
-func (h *Logout) Handle(params authentication.PostV1BomondVnAuthLogoutParams, principal interface{}) middleware.Responder {
+func (h *Logout) Handle(params authentication.PostV1BomondVnAuthLogoutParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
-	q := &query.LogoutQuery{
-		Auth: params.Authorization,
-	}
+	q := &query.LogoutQuery{}
 
 	err := h.ctrl.Exec(ctx, q)
 	if err != nil {

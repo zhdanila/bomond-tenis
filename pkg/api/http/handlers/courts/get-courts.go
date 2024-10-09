@@ -22,7 +22,7 @@ type GetUserService interface {
 	Handle(params courts.GetV1BomondVnCourtsParams) middleware.Responder
 }
 
-func (h *GetCourts) Handle(params courts.GetV1BomondVnCourtsParams, principal interface{}) middleware.Responder {
+func (h *GetCourts) Handle(params courts.GetV1BomondVnCourtsParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
 	q := &query.GetCourtsQuery{}

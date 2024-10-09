@@ -55,11 +55,9 @@ paths:
   /v1/bomond.vn/auth/logout:
     post:
       security:
-        - Bearer: []  # Secure endpoint with JWT
+        - Bearer: [ ]
       produces:
         - application/json
-      parameters:
-        - $ref: '#/parameters/Authorization'
       responses:
         '200':
           description: User successfully logged out
@@ -74,12 +72,9 @@ paths:
 
   /v1/bomond.vn/users/{user_id}:
     get:
-      security:
-        - Bearer: []  # Secure endpoint with JWT
       produces:
         - application/json
       parameters:
-        - $ref: '#/parameters/Authorization'
         - $ref: '#/parameters/UserId'
       responses:
         '200':
@@ -95,13 +90,12 @@ paths:
 
     put:
       security:
-        - Bearer: []  # Secure endpoint with JWT
+        - Bearer: [ ]
       produces:
         - application/json
       parameters:
-        - $ref: '#/parameters/Authorization'
-        - $ref: '#/parameters/UserId'
         - $ref: '#/parameters/UserUpdate'
+        - $ref: '#/parameters/UserId'
       responses:
         '200':
           description: User successfully updated
@@ -116,11 +110,10 @@ paths:
 
     delete:
       security:
-        - Bearer: []  # Secure endpoint with JWT
+        - Bearer: [ ]
       produces:
         - application/json
       parameters:
-        - $ref: '#/parameters/Authorization'
         - $ref: '#/parameters/UserId'
       responses:
         '200':
@@ -136,12 +129,8 @@ paths:
 
   /v1/bomond.vn/courts:
     get:
-      security:
-        - Bearer: []  # Secure endpoint with JWT
       produces:
         - application/json
-      parameters:
-        - $ref: '#/parameters/Authorization'
       responses:
         '200':
           description: Courts list retrieved
@@ -157,13 +146,12 @@ paths:
   /v1/bomond.vn/{court_id}/book:
     post:
       security:
-        - Bearer: []  # Secure endpoint with JWT
+        - Bearer: [ ]
       produces:
         - application/json
       parameters:
-        - $ref: '#/parameters/Authorization'
-        - $ref: '#/parameters/CourtId'
         - $ref: '#/parameters/BookingRequest'
+        - $ref: '#/parameters/CourtId'
       responses:
         '200':
           description: Court successfully booked
@@ -178,11 +166,10 @@ paths:
 
     get:
       security:
-        - Bearer: []  # Secure endpoint with JWT
+        - Bearer: [ ]
       produces:
         - application/json
       parameters:
-        - $ref: '#/parameters/Authorization'
         - $ref: '#/parameters/CourtId'
       responses:
         '200':
@@ -199,11 +186,10 @@ paths:
   /v1/bomond.vn/{court_id}/book/{book_id}:
     delete:
       security:
-        - Bearer: []  # Secure endpoint with JWT
+        - Bearer: [ ]
       produces:
         - application/json
       parameters:
-        - $ref: '#/parameters/Authorization'
         - $ref: '#/parameters/CourtId'
         - $ref: '#/parameters/BookingId'
       responses:
@@ -238,7 +224,6 @@ parameters:
           type: string
         password:
           type: string
-    required: true
 
   UserSignin:
     name: userSignin
@@ -250,7 +235,6 @@ parameters:
           type: string
         password:
           type: string
-    required: true
 
   UserId:
     name: user_id
@@ -293,15 +277,16 @@ parameters:
           format: time
         duration:
           type: integer
-    required: true
 
   BookingId:
     name: book_id
     in: path
-    required: true
     type: string
+    required: true
 
 definitions:
+  principal:
+    type: string
   SuccessResponse:
     properties:
       code:

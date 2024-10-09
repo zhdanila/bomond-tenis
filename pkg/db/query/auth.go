@@ -1,7 +1,7 @@
 package query
 
 type LogoutQuery struct {
-	Auth string `db:"auth"`
+	//Auth string `db:"auth"`
 }
 
 type SignInQuery struct {

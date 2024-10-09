@@ -10,6 +10,7 @@ import (
 	"bomond-tenis/pkg/utils"
 	"context"
 	"fmt"
+	"github.com/go-openapi/errors"
 	"net/http"
 	"net/http/pprof"
 	"runtime/debug"
@@ -32,17 +33,41 @@ func NewServer(host string, port int, ctrl controller.Controller, healthchecks .
 
 	api := operations2.NewBomondTenisAPI(spec)
 
-	api.BearerAuth = utils.ValidateHeader
+	api.BearerAuth = func(token string) (interface{}, error) {
+		if token == "" {
+			log.Log().Msg("empty auth header")
+			return nil, nil
+		}
 
-	//Users
-	api.UsersGetV1BomondVnUsersUserIDHandler = users.NewGetUser(ctrl)
-	api.UsersPutV1BomondVnUsersUserIDHandler = users.NewUpdateUser(ctrl)
-	api.UsersDeleteV1BomondVnUsersUserIDHandler = users.NewDeleteUser(ctrl)
+		headerParts := strings.Split(token, " ")
+		if len(headerParts) != 2 || headerParts[0] != "Bearer" {
+			log.Log().Msg("invalid auth header")
+			return nil, nil
+		}
+
+		if len(headerParts[1]) == 0 {
+			log.Log().Msg("token is empty")
+			return nil, nil
+		}
+
+		id, err := utils.ParseJWT(headerParts[1])
+		if err != nil {
+			api.Logger("Access attempt with incorrect api key auth: %s", token)
+			return nil, errors.New(401, "incorrect api key auth")
+		}
+
+		return id, nil
+	}
 
 	//Authentication
 	api.AuthenticationPostV1BomondVnAuthSignInHandler = auth2.NewSignIn(ctrl)
 	api.AuthenticationPostV1BomondVnAuthSignUpHandler = auth2.NewSignUp(ctrl)
 	api.AuthenticationPostV1BomondVnAuthLogoutHandler = auth2.NewLogout(ctrl)
+
+	//Users
+	api.UsersGetV1BomondVnUsersUserIDHandler = users.NewGetUser(ctrl)
+	api.UsersPutV1BomondVnUsersUserIDHandler = users.NewUpdateUser(ctrl)
+	api.UsersDeleteV1BomondVnUsersUserIDHandler = users.NewDeleteUser(ctrl)
 
 	//Courts
 	api.CourtsGetV1BomondVnCourtsHandler = courts.NewGetCourts(ctrl)
@@ -64,7 +89,6 @@ func NewServer(host string, port int, ctrl controller.Controller, healthchecks .
 			middlewareHealthz(healthchecks...),
 			middlewareRecover,
 			middlewareLogging,
-			controller.SetupGlobalMiddleware,
 		}
 
 		return setupMiddleware(api.Context().RoutesHandler(builder), middlewares...)

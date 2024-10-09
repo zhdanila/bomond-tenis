@@ -22,7 +22,7 @@ type UpdateUserService interface {
 	Handle(params users.PutV1BomondVnUsersUserIDParams) middleware.Responder
 }
 
-func (h *UpdateUser) Handle(params users.PutV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
+func (h *UpdateUser) Handle(params users.PutV1BomondVnUsersUserIDParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
 	q := &query.UpdateUserQuery{

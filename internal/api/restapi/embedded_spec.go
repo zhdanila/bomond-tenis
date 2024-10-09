@@ -47,11 +47,6 @@ func init() {
         "tags": [
           "Authentication"
         ],
-        "parameters": [
-          {
-            "$ref": "#/parameters/Authorization"
-          }
-        ],
         "responses": {
           "200": {
             "description": "User successfully logged out",
@@ -128,21 +123,11 @@ func init() {
     },
     "/v1/bomond.vn/courts": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "produces": [
           "application/json"
         ],
         "tags": [
           "Courts"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/parameters/Authorization"
-          }
         ],
         "responses": {
           "200": {
@@ -162,11 +147,6 @@ func init() {
     },
     "/v1/bomond.vn/users/{user_id}": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "produces": [
           "application/json"
         ],
@@ -174,9 +154,6 @@ func init() {
           "Users"
         ],
         "parameters": [
-          {
-            "$ref": "#/parameters/Authorization"
-          },
           {
             "$ref": "#/parameters/UserId"
           }
@@ -210,13 +187,10 @@ func init() {
         ],
         "parameters": [
           {
-            "$ref": "#/parameters/Authorization"
+            "$ref": "#/parameters/UserUpdate"
           },
           {
             "$ref": "#/parameters/UserId"
-          },
-          {
-            "$ref": "#/parameters/UserUpdate"
           }
         ],
         "responses": {
@@ -247,9 +221,6 @@ func init() {
           "Users"
         ],
         "parameters": [
-          {
-            "$ref": "#/parameters/Authorization"
-          },
           {
             "$ref": "#/parameters/UserId"
           }
@@ -285,9 +256,6 @@ func init() {
         ],
         "parameters": [
           {
-            "$ref": "#/parameters/Authorization"
-          },
-          {
             "$ref": "#/parameters/CourtId"
           }
         ],
@@ -320,13 +288,10 @@ func init() {
         ],
         "parameters": [
           {
-            "$ref": "#/parameters/Authorization"
+            "$ref": "#/parameters/BookingRequest"
           },
           {
             "$ref": "#/parameters/CourtId"
-          },
-          {
-            "$ref": "#/parameters/BookingRequest"
           }
         ],
         "responses": {
@@ -359,9 +324,6 @@ func init() {
           "Courts"
         ],
         "parameters": [
-          {
-            "$ref": "#/parameters/Authorization"
-          },
           {
             "$ref": "#/parameters/CourtId"
           },
@@ -440,6 +402,9 @@ func init() {
           "format": "date-time"
         }
       }
+    },
+    "principal": {
+      "type": "string"
     }
   },
   "parameters": {
@@ -459,7 +424,6 @@ func init() {
     "BookingRequest": {
       "name": "bookingRequest",
       "in": "body",
-      "required": true,
       "schema": {
         "type": "object",
         "properties": {
@@ -495,7 +459,6 @@ func init() {
     "UserSignin": {
       "name": "userSignin",
       "in": "body",
-      "required": true,
       "schema": {
         "type": "object",
         "properties": {
@@ -511,7 +474,6 @@ func init() {
     "UserSignup": {
       "name": "userSignup",
       "in": "body",
-      "required": true,
       "schema": {
         "type": "object",
         "properties": {
@@ -584,15 +546,6 @@ func init() {
         "tags": [
           "Authentication"
         ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "JWT token for authorization",
-            "name": "Authorization",
-            "in": "header",
-            "required": true
-          }
-        ],
         "responses": {
           "200": {
             "description": "User successfully logged out",
@@ -621,7 +574,6 @@ func init() {
           {
             "name": "userSignin",
             "in": "body",
-            "required": true,
             "schema": {
               "type": "object",
               "properties": {
@@ -663,7 +615,6 @@ func init() {
           {
             "name": "userSignup",
             "in": "body",
-            "required": true,
             "schema": {
               "type": "object",
               "properties": {
@@ -698,25 +649,11 @@ func init() {
     },
     "/v1/bomond.vn/courts": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "produces": [
           "application/json"
         ],
         "tags": [
           "Courts"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "JWT token for authorization",
-            "name": "Authorization",
-            "in": "header",
-            "required": true
-          }
         ],
         "responses": {
           "200": {
@@ -736,11 +673,6 @@ func init() {
     },
     "/v1/bomond.vn/users/{user_id}": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "produces": [
           "application/json"
         ],
@@ -748,13 +680,6 @@ func init() {
           "Users"
         ],
         "parameters": [
-          {
-            "type": "string",
-            "description": "JWT token for authorization",
-            "name": "Authorization",
-            "in": "header",
-            "required": true
-          },
           {
             "type": "string",
             "name": "user_id",
@@ -791,19 +716,6 @@ func init() {
         ],
         "parameters": [
           {
-            "type": "string",
-            "description": "JWT token for authorization",
-            "name": "Authorization",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "user_id",
-            "in": "path",
-            "required": true
-          },
-          {
             "name": "userUpdate",
             "in": "body",
             "schema": {
@@ -820,6 +732,12 @@ func init() {
                 }
               }
             }
+          },
+          {
+            "type": "string",
+            "name": "user_id",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
@@ -850,13 +768,6 @@ func init() {
           "Users"
         ],
         "parameters": [
-          {
-            "type": "string",
-            "description": "JWT token for authorization",
-            "name": "Authorization",
-            "in": "header",
-            "required": true
-          },
           {
             "type": "string",
             "name": "user_id",
@@ -896,13 +807,6 @@ func init() {
         "parameters": [
           {
             "type": "string",
-            "description": "JWT token for authorization",
-            "name": "Authorization",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
             "name": "court_id",
             "in": "path",
             "required": true
@@ -937,22 +841,8 @@ func init() {
         ],
         "parameters": [
           {
-            "type": "string",
-            "description": "JWT token for authorization",
-            "name": "Authorization",
-            "in": "header",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "court_id",
-            "in": "path",
-            "required": true
-          },
-          {
             "name": "bookingRequest",
             "in": "body",
-            "required": true,
             "schema": {
               "type": "object",
               "properties": {
@@ -972,6 +862,12 @@ func init() {
                 }
               }
             }
+          },
+          {
+            "type": "string",
+            "name": "court_id",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
@@ -1004,13 +900,6 @@ func init() {
           "Courts"
         ],
         "parameters": [
-          {
-            "type": "string",
-            "description": "JWT token for authorization",
-            "name": "Authorization",
-            "in": "header",
-            "required": true
-          },
           {
             "type": "string",
             "name": "court_id",
@@ -1095,6 +984,9 @@ func init() {
           "format": "date-time"
         }
       }
+    },
+    "principal": {
+      "type": "string"
     }
   },
   "parameters": {
@@ -1114,7 +1006,6 @@ func init() {
     "BookingRequest": {
       "name": "bookingRequest",
       "in": "body",
-      "required": true,
       "schema": {
         "type": "object",
         "properties": {
@@ -1150,7 +1041,6 @@ func init() {
     "UserSignin": {
       "name": "userSignin",
       "in": "body",
-      "required": true,
       "schema": {
         "type": "object",
         "properties": {
@@ -1166,7 +1056,6 @@ func init() {
     "UserSignup": {
       "name": "userSignup",
       "in": "body",
-      "required": true,
       "schema": {
         "type": "object",
         "properties": {

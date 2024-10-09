@@ -6,7 +6,6 @@ package courts
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"io"
 	"net/http"
 
 	"github.com/go-openapi/errors"
@@ -33,13 +32,7 @@ type PostV1BomondVnCourtIDBookParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*JWT token for authorization
-	  Required: true
-	  In: header
-	*/
-	Authorization string
 	/*
-	  Required: true
 	  In: body
 	*/
 	BookingRequest PostV1BomondVnCourtIDBookBody
@@ -59,19 +52,11 @@ func (o *PostV1BomondVnCourtIDBookParams) BindRequest(r *http.Request, route *mi
 
 	o.HTTPRequest = r
 
-	if err := o.bindAuthorization(r.Header[http.CanonicalHeaderKey("Authorization")], true, route.Formats); err != nil {
-		res = append(res, err)
-	}
-
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
 		var body PostV1BomondVnCourtIDBookBody
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
-			if err == io.EOF {
-				res = append(res, errors.Required("bookingRequest", "body", ""))
-			} else {
-				res = append(res, errors.NewParseError("bookingRequest", "body", "", err))
-			}
+			res = append(res, errors.NewParseError("bookingRequest", "body", "", err))
 		} else {
 			// validate body object
 			if err := body.Validate(route.Formats); err != nil {
@@ -87,8 +72,6 @@ func (o *PostV1BomondVnCourtIDBookParams) BindRequest(r *http.Request, route *mi
 				o.BookingRequest = body
 			}
 		}
-	} else {
-		res = append(res, errors.Required("bookingRequest", "body", ""))
 	}
 
 	rCourtID, rhkCourtID, _ := route.Params.GetOK("court_id")
@@ -98,26 +81,6 @@ func (o *PostV1BomondVnCourtIDBookParams) BindRequest(r *http.Request, route *mi
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-// bindAuthorization binds and validates parameter Authorization from header.
-func (o *PostV1BomondVnCourtIDBookParams) bindAuthorization(rawData []string, hasKey bool, formats strfmt.Registry) error {
-	if !hasKey {
-		return errors.Required("Authorization", "header", rawData)
-	}
-	var raw string
-	if len(rawData) > 0 {
-		raw = rawData[len(rawData)-1]
-	}
-
-	// Required: true
-
-	if err := validate.RequiredString("Authorization", "header", raw); err != nil {
-		return err
-	}
-	o.Authorization = raw
-
 	return nil
 }
 

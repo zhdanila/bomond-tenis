@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/validate"
 )
 
 // NewGetV1BomondVnCourtIDBookParams creates a new GetV1BomondVnCourtIDBookParams object
@@ -31,11 +30,6 @@ type GetV1BomondVnCourtIDBookParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*JWT token for authorization
-	  Required: true
-	  In: header
-	*/
-	Authorization string
 	/*
 	  Required: true
 	  In: path
@@ -52,10 +46,6 @@ func (o *GetV1BomondVnCourtIDBookParams) BindRequest(r *http.Request, route *mid
 
 	o.HTTPRequest = r
 
-	if err := o.bindAuthorization(r.Header[http.CanonicalHeaderKey("Authorization")], true, route.Formats); err != nil {
-		res = append(res, err)
-	}
-
 	rCourtID, rhkCourtID, _ := route.Params.GetOK("court_id")
 	if err := o.bindCourtID(rCourtID, rhkCourtID, route.Formats); err != nil {
 		res = append(res, err)
@@ -63,26 +53,6 @@ func (o *GetV1BomondVnCourtIDBookParams) BindRequest(r *http.Request, route *mid
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-// bindAuthorization binds and validates parameter Authorization from header.
-func (o *GetV1BomondVnCourtIDBookParams) bindAuthorization(rawData []string, hasKey bool, formats strfmt.Registry) error {
-	if !hasKey {
-		return errors.Required("Authorization", "header", rawData)
-	}
-	var raw string
-	if len(rawData) > 0 {
-		raw = rawData[len(rawData)-1]
-	}
-
-	// Required: true
-
-	if err := validate.RequiredString("Authorization", "header", raw); err != nil {
-		return err
-	}
-	o.Authorization = raw
-
 	return nil
 }
 

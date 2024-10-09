@@ -2,47 +2,50 @@ package utils
 
 import (
 	"errors"
-	"fmt"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/rs/zerolog/log"
-	"strings"
 	"time"
 )
 
-const SecretKey = "asfa313sdg##F"
+const (
+	SecretKey = "asfa313sdg##F"
+	TokenTTL  = 15 * time.Hour
+)
 
-func ValidateHeader(bearerHeader string) (interface{}, error) {
-	bearerToken := strings.Split(bearerHeader, " ")[1]
-	claims := jwt.MapClaims{}
-	token, err := jwt.ParseWithClaims(bearerToken, claims, func(token *jwt.Token) (interface{}, error) {
+func ParseJWT(tokenString string) (interface{}, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("error decoding token")
+			return nil, errors.New("invalid signing method")
 		}
+
 		return []byte(SecretKey), nil
 	})
 	if err != nil {
-		log.Error().Err(err).Msgf("failed to validate jwt tocken")
-		return nil, err
+		return 0, err
 	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, errors.New("invalid claims")
+	}
+
 	if token.Valid {
-		return claims["user"].(string), nil
+		return claims["id"], nil
 	}
-	return nil, errors.New("invalid token")
+
+	return nil, nil
 }
 
-func GenerateJWT(email, id string) (string, error) {
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-
-	claims["authorized"] = true
-	claims["user"] = email
-	claims["id"] = id
-	claims["exp"] = time.Now().Add(time.Minute * 300).Unix()
+func GenerateJWT(userID string, userName string) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":   userID,
+		"name": userName,
+		"exp":  time.Now().Add(TokenTTL).Unix(),
+	})
 
 	tokenString, err := token.SignedString([]byte(SecretKey))
 	if err != nil {
-		log.Error().Err(err).Msgf("failed to generate jwt tocken")
 		return "", err
 	}
+
 	return tokenString, nil
 }

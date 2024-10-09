@@ -22,7 +22,7 @@ type GetBookedCourtService interface {
 	Handle(params courts.GetV1BomondVnCourtIDBookParams) middleware.Responder
 }
 
-func (h *GetBookedCourt) Handle(params courts.GetV1BomondVnCourtIDBookParams, principal interface{}) middleware.Responder {
+func (h *GetBookedCourt) Handle(params courts.GetV1BomondVnCourtIDBookParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
 	q := &query.GetBookedCourtQuery{

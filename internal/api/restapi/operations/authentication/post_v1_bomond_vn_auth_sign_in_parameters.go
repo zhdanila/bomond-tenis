@@ -6,7 +6,6 @@ package authentication
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"io"
 	"net/http"
 
 	"github.com/go-openapi/errors"
@@ -33,7 +32,6 @@ type PostV1BomondVnAuthSignInParams struct {
 	HTTPRequest *http.Request `json:"-"`
 
 	/*
-	  Required: true
 	  In: body
 	*/
 	UserSignin PostV1BomondVnAuthSignInBody
@@ -52,11 +50,7 @@ func (o *PostV1BomondVnAuthSignInParams) BindRequest(r *http.Request, route *mid
 		defer r.Body.Close()
 		var body PostV1BomondVnAuthSignInBody
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
-			if err == io.EOF {
-				res = append(res, errors.Required("userSignin", "body", ""))
-			} else {
-				res = append(res, errors.NewParseError("userSignin", "body", "", err))
-			}
+			res = append(res, errors.NewParseError("userSignin", "body", "", err))
 		} else {
 			// validate body object
 			if err := body.Validate(route.Formats); err != nil {
@@ -72,8 +66,6 @@ func (o *PostV1BomondVnAuthSignInParams) BindRequest(r *http.Request, route *mid
 				o.UserSignin = body
 			}
 		}
-	} else {
-		res = append(res, errors.Required("userSignin", "body", ""))
 	}
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

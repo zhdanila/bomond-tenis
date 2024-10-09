@@ -22,7 +22,7 @@ type DeleteUserService interface {
 	Handle(params users.DeleteV1BomondVnUsersUserIDParams) middleware.Responder
 }
 
-func (h *DeleteUser) Handle(params users.DeleteV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
+func (h *DeleteUser) Handle(params users.DeleteV1BomondVnUsersUserIDParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
 	q := &query.DeleteUserQuery{
