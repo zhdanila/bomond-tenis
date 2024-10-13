@@ -2,6 +2,7 @@ package users_db
 
 import (
 	"bomond-tenis/pkg/db/query"
+	"bomond-tenis/pkg/utils"
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
@@ -16,7 +17,12 @@ func NewDeleteUserHandler(pool *sqlx.DB) *deleteUserHandler {
 }
 
 func (h *deleteUserHandler) Exec(ctx context.Context, args *query.DeleteUserQuery) (err error) {
-	fmt.Println("delete user")
+	sql := fmt.Sprintf("DELETE FROM %s WHERE id = $1", utils.UsersTable)
+
+	_, err = h.pool.Exec(sql, args.UserId)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
