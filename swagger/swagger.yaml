@@ -72,6 +72,8 @@ paths:
 
   /v1/bomond.vn/users/{user_id}:
     get:
+      security:
+        - Bearer: [ ]
       produces:
         - application/json
       parameters:

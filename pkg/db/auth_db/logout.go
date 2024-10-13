@@ -2,21 +2,30 @@ package auth_db
 
 import (
 	"bomond-tenis/pkg/db/query"
+	"bomond-tenis/pkg/utils"
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	redis2 "github.com/redis/go-redis/v9"
 )
 
 type logoutHandler struct {
-	pool *sqlx.DB
+	pool  *sqlx.DB
+	redis *redis2.Client
 }
 
-func NewLogoutHandler(pool *sqlx.DB) *logoutHandler {
-	return &logoutHandler{pool: pool}
+func NewLogoutHandler(pool *sqlx.DB, redis *redis2.Client) *logoutHandler {
+	return &logoutHandler{
+		pool:  pool,
+		redis: redis,
+	}
 }
 
 func (h *logoutHandler) Exec(ctx context.Context, args *query.LogoutQuery) (err error) {
-	fmt.Println("logout")
+	err = h.redis.Set(ctx, args.Token, "blacklisted", utils.TokenTTL).Err()
+	if err != nil {
+		return fmt.Errorf("failed to add token to blacklist: %v", err)
+	}
 
 	return nil
 }
@@ -24,29 +33,3 @@ func (h *logoutHandler) Exec(ctx context.Context, args *query.LogoutQuery) (err 
 func (h *logoutHandler) Context() interface{} {
 	return (*query.LogoutQuery)(nil)
 }
-
-//query := fmt.Sprintf(`INSERT INTO %s (uuid, account, type, parameters, data, status, created_at, send_at)
-//	VALUES (gen_random_uuid(), :account, :type, :parameters, :data, :status, :created_at, :send_at)
-//	RETURNING uuid`, NotificationTable)
-//
-//rows, err := h.pool.NamedQueryContext(ctx, query, params)
-//if err != nil {
-//	return err
-//}
-//
-//defer rows.Close()
-//
-//for rows.Next() {
-//	var u string
-//
-//	if err = rows.Scan(&u); err != nil {
-//		return err
-//	}
-//
-//	uu, err := uuid.Parse(u)
-//	if err != nil {
-//		return err
-//	}
-//
-//	args.Uuid = uu
-//}

@@ -34,7 +34,7 @@ func (h *GetUser) Handle(params users.GetV1BomondVnUsersUserIDParams, principal 
 		return users.NewGetV1BomondVnUsersUserIDBadRequest().WithPayload(&models2.ErrorResult{
 			Code:      "400",
 			DebugInfo: err.Error(),
-			Message:   "Error creating get user handler",
+			Message:   "Error executing get user",
 			Status:    400,
 			Timestamp: strfmt.DateTime(time.Now().UTC()),
 		})
@@ -43,6 +43,7 @@ func (h *GetUser) Handle(params users.GetV1BomondVnUsersUserIDParams, principal 
 	return users.NewGetV1BomondVnUsersUserIDOK().WithPayload(&models2.SuccessResponse{
 		Code:      "200",
 		Message:   "Success",
+		Data:      q.Out,
 		Status:    200,
 		Timestamp: strfmt.DateTime(time.Now().UTC()),
 	})

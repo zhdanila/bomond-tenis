@@ -147,6 +147,11 @@ func init() {
     },
     "/v1/bomond.vn/users/{user_id}": {
       "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -673,6 +678,11 @@ func init() {
     },
     "/v1/bomond.vn/users/{user_id}": {
       "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "produces": [
           "application/json"
         ],

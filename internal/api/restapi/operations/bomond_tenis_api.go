@@ -58,7 +58,7 @@ func NewBomondTenisAPI(spec *loads.Document) *BomondTenisAPI {
 		CourtsGetV1BomondVnCourtsHandler: courts.GetV1BomondVnCourtsHandlerFunc(func(params courts.GetV1BomondVnCourtsParams) middleware.Responder {
 			return middleware.NotImplemented("operation courts.GetV1BomondVnCourts has not yet been implemented")
 		}),
-		UsersGetV1BomondVnUsersUserIDHandler: users.GetV1BomondVnUsersUserIDHandlerFunc(func(params users.GetV1BomondVnUsersUserIDParams) middleware.Responder {
+		UsersGetV1BomondVnUsersUserIDHandler: users.GetV1BomondVnUsersUserIDHandlerFunc(func(params users.GetV1BomondVnUsersUserIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation users.GetV1BomondVnUsersUserID has not yet been implemented")
 		}),
 		AuthenticationPostV1BomondVnAuthLogoutHandler: authentication.PostV1BomondVnAuthLogoutHandlerFunc(func(params authentication.PostV1BomondVnAuthLogoutParams, principal interface{}) middleware.Responder {

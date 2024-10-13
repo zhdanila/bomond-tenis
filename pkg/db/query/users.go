@@ -2,6 +2,9 @@ package query
 
 type GetUserQuery struct {
 	UserId string `json:"user_id"`
+	Out    struct {
+		Account Account `db:"account" json:"account"`
+	}
 }
 
 type UpdateUserQuery struct {

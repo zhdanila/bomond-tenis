@@ -11,6 +11,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-openapi/errors"
+	redis2 "github.com/redis/go-redis/v9"
 	"net/http"
 	"net/http/pprof"
 	"runtime/debug"
@@ -25,7 +26,7 @@ import (
 
 type Healthcheck func(ctx context.Context) error
 
-func NewServer(host string, port int, ctrl controller.Controller, healthchecks ...Healthcheck) (*restapi2.Server, error) {
+func NewServer(host string, port int, ctrl controller.Controller, redis *redis2.Client, healthchecks ...Healthcheck) (*restapi2.Server, error) {
 	spec, err := loads.Embedded(restapi2.SwaggerJSON, restapi2.FlatSwaggerJSON)
 	if err != nil {
 		return nil, err
@@ -50,13 +51,19 @@ func NewServer(host string, port int, ctrl controller.Controller, healthchecks .
 			return nil, nil
 		}
 
-		id, err := utils.ParseJWT(headerParts[1])
+		err := utils.CheckJWT(headerParts[1])
 		if err != nil {
 			api.Logger("Access attempt with incorrect api key auth: %s", token)
 			return nil, errors.New(401, "incorrect api key auth")
 		}
 
-		return id, nil
+		err = utils.JWTBlacklistMiddleware(headerParts[1], redis)
+		if err != nil {
+			api.Logger("Access attempt with blacklisted api key auth: %s", token)
+			return nil, errors.New(401, "blacklisted api key auth")
+		}
+
+		return headerParts[1], nil
 	}
 
 	//Authentication

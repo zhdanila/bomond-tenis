@@ -7,9 +7,10 @@ import (
 	"bomond-tenis/pkg/db/courts"
 	"bomond-tenis/pkg/db/users_db"
 	"github.com/jmoiron/sqlx"
+	redis2 "github.com/redis/go-redis/v9"
 )
 
-func ControllerInit(ctrlRegistry *controller.ControllerImpl, ctrl controller.Controller, pool *sqlx.DB, env config.Environment) (e error) {
+func ControllerInit(ctrlRegistry *controller.ControllerImpl, ctrl controller.Controller, pool *sqlx.DB, redis *redis2.Client, env config.Environment) (e error) {
 
 	propogateErr := func(err error) {
 		if err != nil {
@@ -18,7 +19,7 @@ func ControllerInit(ctrlRegistry *controller.ControllerImpl, ctrl controller.Con
 	}
 	// db
 	// auth
-	propogateErr(ctrlRegistry.RegisterHandler(auth_db.NewLogoutHandler(pool)))
+	propogateErr(ctrlRegistry.RegisterHandler(auth_db.NewLogoutHandler(pool, redis)))
 	propogateErr(ctrlRegistry.RegisterHandler(auth_db.NewSignInHandler(pool)))
 	propogateErr(ctrlRegistry.RegisterHandler(auth_db.NewSignUpHandler(pool)))
 

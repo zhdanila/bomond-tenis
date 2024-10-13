@@ -23,17 +23,19 @@ type LogoutService interface {
 	Handle(params authentication.PostV1BomondVnAuthLogoutParams) middleware.Responder
 }
 
-func (h *Logout) Handle(params authentication.PostV1BomondVnAuthLogoutParams) middleware.Responder {
+func (h *Logout) Handle(params authentication.PostV1BomondVnAuthLogoutParams, principal interface{}) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
-	q := &query.LogoutQuery{}
+	q := &query.LogoutQuery{
+		Token: principal.(string),
+	}
 
 	err := h.ctrl.Exec(ctx, q)
 	if err != nil {
 		return authentication.NewPostV1BomondVnAuthLogoutBadRequest().WithPayload(&models2.ErrorResult{
 			Code:      "400",
 			DebugInfo: err.Error(),
-			Message:   "Error creating logout handler",
+			Message:   "Error with adding token to blacklist",
 			Status:    400,
 			Timestamp: strfmt.DateTime(time.Now().UTC()),
 		})

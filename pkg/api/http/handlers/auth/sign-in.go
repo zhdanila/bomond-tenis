@@ -6,7 +6,6 @@ import (
 	controller2 "bomond-tenis/pkg/controller"
 	"bomond-tenis/pkg/db/query"
 	"bomond-tenis/pkg/utils"
-	"fmt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"golang.org/x/crypto/bcrypt"
@@ -78,7 +77,7 @@ func (h *SignIn) Handle(params authentication.PostV1BomondVnAuthSignInParams) mi
 
 	return authentication.NewPostV1BomondVnAuthSignUpOK().WithPayload(&models2.SuccessResponse{
 		Code:      "200",
-		Message:   fmt.Sprintf("Token: %s", token),
+		Message:   token,
 		Status:    200,
 		Timestamp: strfmt.DateTime(time.Now().UTC()),
 	})
