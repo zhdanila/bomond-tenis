@@ -7,10 +7,8 @@ import (
 	"bomond-tenis/pkg/api/http/handlers/courts"
 	"bomond-tenis/pkg/api/http/handlers/users"
 	controller "bomond-tenis/pkg/controller"
-	"bomond-tenis/pkg/utils"
 	"context"
 	"fmt"
-	"github.com/go-openapi/errors"
 	redis2 "github.com/redis/go-redis/v9"
 	"net/http"
 	"net/http/pprof"
@@ -51,17 +49,17 @@ func NewServer(host string, port int, ctrl controller.Controller, redis *redis2.
 			return nil, nil
 		}
 
-		err := utils.CheckJWT(headerParts[1])
-		if err != nil {
-			api.Logger("Access attempt with incorrect api key auth: %s", token)
-			return nil, errors.New(401, "incorrect api key auth")
-		}
-
-		err = utils.JWTBlacklistMiddleware(headerParts[1], redis)
-		if err != nil {
-			api.Logger("Access attempt with blacklisted api key auth: %s", token)
-			return nil, errors.New(401, "blacklisted api key auth")
-		}
+		//err := utils.CheckJWT(headerParts[1])
+		//if err != nil {
+		//	api.Logger("Access attempt with incorrect api key auth: %s", token)
+		//	return nil, errors.New(401, "incorrect api key auth")
+		//}
+		//
+		//err = utils.JWTBlacklistMiddleware(headerParts[1], redis)
+		//if err != nil {
+		//	api.Logger("Access attempt with blacklisted api key auth: %s", token)
+		//	return nil, errors.New(401, "blacklisted api key auth")
+		//}
 
 		return headerParts[1], nil
 	}

@@ -29,5 +29,5 @@ sudo docker run -d --name redis-bomond-tenis -p 6380:6379 -e REDIS_PASSWORD=qwer
 
 Running SQL migrations
 ```
-goose "host=localhost port=5436 dbname=bomond user=postgres password=qwerty sslmode=disable" up   
+goose postgres "host=localhost port=5436 dbname=bomond user=postgres password=qwerty sslmode=disable" up
 ```

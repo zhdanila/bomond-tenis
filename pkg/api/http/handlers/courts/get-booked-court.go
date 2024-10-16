@@ -43,6 +43,7 @@ func (h *GetBookedCourt) Handle(params courts.GetV1BomondVnCourtIDBookParams, pr
 	return courts.NewGetV1BomondVnCourtIDBookOK().WithPayload(&models2.SuccessResponse{
 		Code:      "200",
 		Message:   "Success",
+		Data:      q.Out,
 		Status:    200,
 		Timestamp: strfmt.DateTime(time.Now().UTC()),
 	})

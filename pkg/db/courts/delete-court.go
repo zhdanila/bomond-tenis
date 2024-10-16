@@ -2,6 +2,7 @@ package courts
 
 import (
 	"bomond-tenis/pkg/db/query"
+	"bomond-tenis/pkg/utils"
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
@@ -16,7 +17,12 @@ func NewCancelCourtBookingQueryHandler(pool *sqlx.DB) *cancelCourtBookingQueryHa
 }
 
 func (h *cancelCourtBookingQueryHandler) Exec(ctx context.Context, args *query.CancelCourtBookingQuery) (err error) {
-	fmt.Println("cancel booking court")
+	sql := fmt.Sprintf("DELETE FROM %s WHERE id = $1", utils.BookedCourtTable)
+
+	_, err = h.pool.Exec(sql, args.BookId)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
