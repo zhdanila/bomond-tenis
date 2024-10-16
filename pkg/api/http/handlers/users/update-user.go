@@ -37,7 +37,7 @@ func (h *UpdateUser) Handle(params users.PutV1BomondVnUsersUserIDParams, princip
 		return users.NewPutV1BomondVnUsersUserIDBadRequest().WithPayload(&models2.ErrorResult{
 			Code:      "400",
 			DebugInfo: err.Error(),
-			Message:   "Error creating update user handler",
+			Message:   "Error executing user update",
 			Status:    400,
 			Timestamp: strfmt.DateTime(time.Now().UTC()),
 		})
