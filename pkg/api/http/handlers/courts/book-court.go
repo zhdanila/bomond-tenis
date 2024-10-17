@@ -26,11 +26,13 @@ func (h *BookCourt) Handle(params courts.PostV1BomondVnCourtIDBookParams, princi
 	ctx := params.HTTPRequest.Context()
 
 	q := &query.BookCourtQuery{
-		CourtId:  params.CourtID,
-		Date:     params.BookingRequest.Date,
-		Duration: params.BookingRequest.Duration,
-		Time:     params.BookingRequest.Time,
-		UserID:   params.BookingRequest.UserID,
+		BookCourt: query.BookedCourt{
+			CourtId:  params.CourtID,
+			UserID:   params.BookingRequest.UserID,
+			Date:     params.BookingRequest.Date,
+			Duration: params.BookingRequest.Duration,
+			Time:     params.BookingRequest.Time,
+		},
 	}
 
 	err := h.ctrl.Exec(ctx, q)

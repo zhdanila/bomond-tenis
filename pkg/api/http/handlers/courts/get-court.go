@@ -7,6 +7,7 @@ import (
 	"bomond-tenis/pkg/db/query"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
+	"log"
 	"time"
 )
 
@@ -39,6 +40,8 @@ func (h *GetBookedCourt) Handle(params courts.GetV1BomondVnCourtIDBookParams, pr
 			Timestamp: strfmt.DateTime(time.Now().UTC()),
 		})
 	}
+
+	log.Printf("q.Out: %+v\n", q.Out)
 
 	return courts.NewGetV1BomondVnCourtIDBookOK().WithPayload(&models2.SuccessResponse{
 		Code:      "200",

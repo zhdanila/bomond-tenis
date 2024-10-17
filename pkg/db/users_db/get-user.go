@@ -8,15 +8,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type getUserHandler struct {
+type GetUserHandler struct {
 	pool *sqlx.DB
 }
 
-func NewGetUserHandler(pool *sqlx.DB) *getUserHandler {
-	return &getUserHandler{pool: pool}
+func NewGetUserHandler(pool *sqlx.DB) *GetUserHandler {
+	return &GetUserHandler{pool: pool}
 }
 
-func (h *getUserHandler) Exec(ctx context.Context, args *query.GetUserQuery) (err error) {
+func (h *GetUserHandler) Exec(ctx context.Context, args *query.GetUserQuery) (err error) {
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", utils.UsersTable)
 
 	rows := h.pool.QueryRow(sql, args.UserId)
@@ -31,6 +31,6 @@ func (h *getUserHandler) Exec(ctx context.Context, args *query.GetUserQuery) (er
 	return nil
 }
 
-func (h *getUserHandler) Context() interface{} {
+func (h *GetUserHandler) Context() interface{} {
 	return (*query.GetUserQuery)(nil)
 }

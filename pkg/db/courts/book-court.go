@@ -8,19 +8,20 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type bookCourtHandler struct {
+type BookCourtHandler struct {
 	pool *sqlx.DB
 }
 
-func NewBookCourtHandler(pool *sqlx.DB) *bookCourtHandler {
-	return &bookCourtHandler{pool: pool}
+func NewBookCourtHandler(pool *sqlx.DB) *BookCourtHandler {
+	return &BookCourtHandler{pool: pool}
 }
 
-func (h *bookCourtHandler) Exec(ctx context.Context, args *query.BookCourtQuery) (err error) {
+func (h *BookCourtHandler) Exec(ctx context.Context, args *query.BookCourtQuery) (err error) {
 	sql := fmt.Sprintf(`INSERT INTO %s (court_id, user_id, date, duration, time)
 		VALUES ($1, $2, $3, $4, $5) RETURNING court_id`, utils.BookedCourtTable)
 
-	rows := h.pool.QueryRow(sql, args.CourtId, args.UserID, args.Date, args.Duration, args.Time)
+	rows := h.pool.QueryRow(sql, args.BookCourt.CourtId, args.BookCourt.UserID,
+		args.BookCourt.Date, args.BookCourt.Duration, args.BookCourt.Time)
 
 	var id int
 	if err := rows.Scan(&id); err != nil {
@@ -32,6 +33,6 @@ func (h *bookCourtHandler) Exec(ctx context.Context, args *query.BookCourtQuery)
 	return nil
 }
 
-func (h *bookCourtHandler) Context() interface{} {
+func (h *BookCourtHandler) Context() interface{} {
 	return (*query.BookCourtQuery)(nil)
 }

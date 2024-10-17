@@ -8,15 +8,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type signInHandler struct {
+type SignInHandler struct {
 	pool *sqlx.DB
 }
 
-func NewSignInHandler(pool *sqlx.DB) *signInHandler {
-	return &signInHandler{pool: pool}
+func NewSignInHandler(pool *sqlx.DB) *SignInHandler {
+	return &SignInHandler{pool: pool}
 }
 
-func (h *signInHandler) Exec(ctx context.Context, args *query.SignInQuery) (err error) {
+func (h *SignInHandler) Exec(ctx context.Context, args *query.SignInQuery) (err error) {
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE email = :email", utils.UsersTable)
 
 	rows, err := h.pool.NamedQueryContext(ctx, sql, args)
@@ -38,6 +38,6 @@ func (h *signInHandler) Exec(ctx context.Context, args *query.SignInQuery) (err 
 	return nil
 }
 
-func (h *signInHandler) Context() interface{} {
+func (h *SignInHandler) Context() interface{} {
 	return (*query.SignInQuery)(nil)
 }

@@ -8,15 +8,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type deleteUserHandler struct {
+type DeleteUserHandler struct {
 	pool *sqlx.DB
 }
 
-func NewDeleteUserHandler(pool *sqlx.DB) *deleteUserHandler {
-	return &deleteUserHandler{pool: pool}
+func NewDeleteUserHandler(pool *sqlx.DB) *DeleteUserHandler {
+	return &DeleteUserHandler{pool: pool}
 }
 
-func (h *deleteUserHandler) Exec(ctx context.Context, args *query.DeleteUserQuery) (err error) {
+func (h *DeleteUserHandler) Exec(ctx context.Context, args *query.DeleteUserQuery) (err error) {
 	sql := fmt.Sprintf("DELETE FROM %s WHERE id = $1", utils.UsersTable)
 
 	_, err = h.pool.Exec(sql, args.UserId)
@@ -27,6 +27,6 @@ func (h *deleteUserHandler) Exec(ctx context.Context, args *query.DeleteUserQuer
 	return nil
 }
 
-func (h *deleteUserHandler) Context() interface{} {
+func (h *DeleteUserHandler) Context() interface{} {
 	return (*query.DeleteUserQuery)(nil)
 }

@@ -8,15 +8,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type getCourtsHandler struct {
+type GetCourtsHandler struct {
 	pool *sqlx.DB
 }
 
-func NewGetCourtsHandler(pool *sqlx.DB) *getCourtsHandler {
-	return &getCourtsHandler{pool: pool}
+func NewGetCourtsHandler(pool *sqlx.DB) *GetCourtsHandler {
+	return &GetCourtsHandler{pool: pool}
 }
 
-func (h *getCourtsHandler) Exec(ctx context.Context, args *query.GetCourtsQuery) (err error) {
+func (h *GetCourtsHandler) Exec(ctx context.Context, args *query.GetCourtsQuery) (err error) {
 	sql := fmt.Sprintf("SELECT * FROM %s", utils.CourtTable)
 
 	rows, err := h.pool.Query(sql)
@@ -44,6 +44,6 @@ func (h *getCourtsHandler) Exec(ctx context.Context, args *query.GetCourtsQuery)
 	return nil
 }
 
-func (h *getCourtsHandler) Context() interface{} {
+func (h *GetCourtsHandler) Context() interface{} {
 	return (*query.GetCourtsQuery)(nil)
 }
