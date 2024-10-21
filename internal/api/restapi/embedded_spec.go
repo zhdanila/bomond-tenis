@@ -434,14 +434,10 @@ func init() {
         "properties": {
           "date": {
             "type": "string",
-            "format": "date"
+            "format": "datetime"
           },
           "duration": {
             "type": "integer"
-          },
-          "time": {
-            "type": "string",
-            "format": "time"
           },
           "userId": {
             "type": "string"
@@ -858,14 +854,10 @@ func init() {
               "properties": {
                 "date": {
                   "type": "string",
-                  "format": "date"
+                  "format": "datetime"
                 },
                 "duration": {
                   "type": "integer"
-                },
-                "time": {
-                  "type": "string",
-                  "format": "time"
                 },
                 "userId": {
                   "type": "string"
@@ -1021,14 +1013,10 @@ func init() {
         "properties": {
           "date": {
             "type": "string",
-            "format": "date"
+            "format": "datetime"
           },
           "duration": {
             "type": "integer"
-          },
-          "time": {
-            "type": "string",
-            "format": "time"
           },
           "userId": {
             "type": "string"

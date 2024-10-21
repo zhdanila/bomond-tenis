@@ -5,6 +5,9 @@ import (
 	"bomond-tenis/internal/api/restapi/operations/courts"
 	controller2 "bomond-tenis/pkg/controller"
 	"bomond-tenis/pkg/db/query"
+	"bomond-tenis/pkg/utils"
+	"errors"
+	"fmt"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
 	"time"
@@ -25,22 +28,61 @@ type BookCourtService interface {
 func (h *BookCourt) Handle(params courts.PostV1BomondVnCourtIDBookParams, principal interface{}) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
 
-	q := &query.BookCourtQuery{
+	q := &query.GetBookedCourtQuery{
+		CourtId: params.CourtID,
+	}
+
+	err := h.ctrl.Exec(ctx, q)
+	if err != nil && errors.Is(err, fmt.Errorf("sql: no rows in result set")) {
+		return courts.NewPostV1BomondVnCourtIDBookBadRequest().WithPayload(&models2.ErrorResult{
+			Code:      "400",
+			DebugInfo: err.Error(),
+			Message:   "ErrorRA",
+			Status:    400,
+			Timestamp: strfmt.DateTime(time.Now().UTC()),
+		})
+	}
+
+	for _, court := range q.Out.BookedCourts {
+		check, err := utils.CheckTimeBookingBusy(court.Court, query.BookedCourt{
+			Date:     params.BookingRequest.Date,
+			Duration: params.BookingRequest.Duration,
+		})
+		if err != nil {
+			return courts.NewPostV1BomondVnCourtIDBookBadRequest().WithPayload(&models2.ErrorResult{
+				Code:      "400",
+				DebugInfo: err.Error(),
+				Message:   "Error",
+				Status:    400,
+				Timestamp: strfmt.DateTime(time.Now().UTC()),
+			})
+		}
+
+		if check {
+			return courts.NewPostV1BomondVnCourtIDBookBadRequest().WithPayload(&models2.ErrorResult{
+				Code:      "400",
+				Message:   "Error, time is busy",
+				Status:    400,
+				Timestamp: strfmt.DateTime(time.Now().UTC()),
+			})
+		}
+	}
+
+	q2 := &query.BookCourtQuery{
 		BookCourt: query.BookedCourt{
 			CourtId:  params.CourtID,
 			UserID:   params.BookingRequest.UserID,
 			Date:     params.BookingRequest.Date,
 			Duration: params.BookingRequest.Duration,
-			Time:     params.BookingRequest.Time,
 		},
 	}
 
-	err := h.ctrl.Exec(ctx, q)
+	err = h.ctrl.Exec(ctx, q2)
 	if err != nil {
 		return courts.NewPostV1BomondVnCourtIDBookBadRequest().WithPayload(&models2.ErrorResult{
 			Code:      "400",
 			DebugInfo: err.Error(),
-			Message:   "Error creating book court handler",
+			Message:   "Error exec booking",
 			Status:    400,
 			Timestamp: strfmt.DateTime(time.Now().UTC()),
 		})

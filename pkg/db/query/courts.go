@@ -8,12 +8,11 @@ type Court struct {
 }
 
 type BookedCourt struct {
-	ID       string      `json:"id"`
-	CourtId  string      `db:"court_id"`
-	UserID   string      `json:"userId,omitempty"`
-	Date     strfmt.Date `json:"date,omitempty"`
-	Duration int64       `json:"duration,omitempty"`
-	Time     string      `json:"time,omitempty"`
+	ID       string          `json:"id"`
+	CourtId  string          `db:"court_id"`
+	UserID   string          `json:"userId,omitempty"`
+	Date     strfmt.DateTime `json:"date,omitempty"`
+	Duration int64           `json:"duration,omitempty"`
 }
 
 type GetCourtsQuery struct {

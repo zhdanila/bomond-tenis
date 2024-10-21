@@ -79,14 +79,11 @@ func (o *PostV1BomondVnCourtIDBook) ServeHTTP(rw http.ResponseWriter, r *http.Re
 type PostV1BomondVnCourtIDBookBody struct {
 
 	// date
-	// Format: date
-	Date strfmt.Date `json:"date,omitempty"`
+	// Format: datetime
+	Date strfmt.DateTime `json:"date,omitempty"`
 
 	// duration
 	Duration int64 `json:"duration,omitempty"`
-
-	// time
-	Time string `json:"time,omitempty"`
 
 	// user Id
 	UserID string `json:"userId,omitempty"`
@@ -111,7 +108,7 @@ func (o *PostV1BomondVnCourtIDBookBody) validateDate(formats strfmt.Registry) er
 		return nil
 	}
 
-	if err := validate.FormatOf("bookingRequest"+"."+"date", "body", "date", o.Date.String(), formats); err != nil {
+	if err := validate.FormatOf("bookingRequest"+"."+"date", "body", "datetime", o.Date.String(), formats); err != nil {
 		return err
 	}
 

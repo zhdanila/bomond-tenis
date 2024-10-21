@@ -273,10 +273,7 @@ parameters:
           type: string
         date:
           type: string
-          format: date
-        time:
-          type: string
-          format: time
+          format: datetime
         duration:
           type: integer
 

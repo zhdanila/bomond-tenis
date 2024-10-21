@@ -3,11 +3,10 @@
 CREATE TABLE booked_court
 (
     id       SERIAL PRIMARY KEY,
-    court_id INT    NOT NULL,
-    user_id  INT    NOT NULL,
-    date     DATE   NOT NULL,
-    duration BIGINT NOT NULL,
-    time     TIME   NOT NULL,
+    court_id INT       NOT NULL,
+    user_id  INT       NOT NULL,
+    date     TIMESTAMP NOT NULL,
+    duration BIGINT    NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (court_id) REFERENCES courts (id) ON DELETE CASCADE
 );

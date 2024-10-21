@@ -19,7 +19,7 @@ func NewGetBookedCourtHandler(pool *sqlx.DB) *GetCourtHandler {
 }
 
 func (h *GetCourtHandler) Exec(ctx context.Context, args *query.GetBookedCourtQuery) (err error) {
-	sql := `SELECT c.id, b.user_id, b.date, b.duration, b.time, c.name 
+	sql := `SELECT c.id, b.user_id, b.date, b.duration, c.name 
             FROM courts c
             LEFT JOIN booked_court b ON c.id = b.court_id
             WHERE c.id = $1`
@@ -36,9 +36,8 @@ func (h *GetCourtHandler) Exec(ctx context.Context, args *query.GetBookedCourtQu
 	for rows.Next() {
 		var bookedCourt query.BookedCourt
 		var userID, duration sql2.NullInt64
-		var time sql2.NullString
 
-		if err = rows.Scan(&court.CourtId, &userID, &bookedCourt.Date, &duration, &time, &court.Name); err != nil {
+		if err = rows.Scan(&court.CourtId, &userID, &bookedCourt.Date, &duration, &court.Name); err != nil {
 			return err
 		}
 
@@ -52,12 +51,6 @@ func (h *GetCourtHandler) Exec(ctx context.Context, args *query.GetBookedCourtQu
 			bookedCourt.Duration = duration.Int64
 		} else {
 			bookedCourt.Duration = 0
-		}
-
-		if time.Valid {
-			bookedCourt.Time = time.String
-		} else {
-			bookedCourt.Time = ""
 		}
 
 		account, err := getAccount(h.pool, int(userID.Int64))

@@ -17,11 +17,11 @@ func NewBookCourtHandler(pool *sqlx.DB) *BookCourtHandler {
 }
 
 func (h *BookCourtHandler) Exec(ctx context.Context, args *query.BookCourtQuery) (err error) {
-	sql := fmt.Sprintf(`INSERT INTO %s (court_id, user_id, date, duration, time)
-		VALUES ($1, $2, $3, $4, $5) RETURNING court_id`, utils.BookedCourtTable)
+	sql := fmt.Sprintf(`INSERT INTO %s (court_id, user_id, date, duration)
+		VALUES ($1, $2, $3, $4) RETURNING id`, utils.BookedCourtTable)
 
 	rows := h.pool.QueryRow(sql, args.BookCourt.CourtId, args.BookCourt.UserID,
-		args.BookCourt.Date, args.BookCourt.Duration, args.BookCourt.Time)
+		args.BookCourt.Date, args.BookCourt.Duration)
 
 	var id int
 	if err := rows.Scan(&id); err != nil {
